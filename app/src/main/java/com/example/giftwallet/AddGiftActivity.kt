@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
@@ -28,6 +29,7 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var db : AppDatabase
     lateinit var giftDao : GiftDao
     lateinit var giftimageurl : String
+    lateinit var giftimageinfo : String
 
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
     // When using Latin script library
@@ -61,6 +63,7 @@ class AddGiftActivity : AppCompatActivity() {
     private fun insertGift(){
         val giftTitle = binding.edtTitle.text.toString()
         var giftImportance = binding.radioGroup.checkedRadioButtonId
+        var giftInfo = binding.edtInfo
 
 
         when(giftImportance){
@@ -82,7 +85,7 @@ class AddGiftActivity : AppCompatActivity() {
             Toast.makeText(this, "모든항목을 채워주세요.",Toast.LENGTH_SHORT).show()
         }else{
             Thread{
-                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance, giftimageurl))
+                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance, giftimageurl, giftimageinfo))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -139,29 +142,40 @@ class AddGiftActivity : AppCompatActivity() {
 
     private fun recognizeText(image: InputImage) {
 
-//        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
-
-        // [START run_detector]
         val result = recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                // Task completed successfully
-                // [START_EXCLUDE]
-                // [START get_text]
+
+//                텍스트 보자
+                binding.edtInfo.setText(visionText.text)
+                giftimageinfo = visionText.text
+
+
+                ArrayAdapter.createFromResource(
+                    this,
+                    visionText.hashCode(),
+                    android.R.layout.simple_spinner_item
+                ).also { adapter ->
+                    // Specify the layout to use when the list of choices appears
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    // Apply the adapter to the spinner
+                    binding.spinner2.adapter = adapter
+                }
+
                 for (block in visionText.textBlocks) {
+//                    block.boundingBox?.set(31,19,59,8)
                     val boundingBox = block.boundingBox
                     val cornerPoints = block.cornerPoints
                     val text = block.text
 
+
                     for (line in block.lines) {
-                        // ...
+                        line.toString()
                         for (element in line.elements) {
-                            // ...
+                            element.toString()
                         }
                     }
                 }
-                // [END get_text]
-                // [END_EXCLUDE]
             }
             .addOnFailureListener { e ->
                 // Task failed with an exception

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(GiftEntity::class), version = 19)
+@Database(entities = arrayOf(GiftEntity::class), version = 20)
 abstract class AppDatabase :RoomDatabase() {
     abstract fun getGiftDao():GiftDao
 
