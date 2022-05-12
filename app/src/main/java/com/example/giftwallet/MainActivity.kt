@@ -1,16 +1,23 @@
 package com.example.giftwallet
 
+import android.Manifest
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftwallet.databinding.ActivityMainBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
+
+private val PERMISSIONS_REQUIREST_CODE = 1
+private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
 class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
 
@@ -27,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
         setContentView(binding.root)
 
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(this, AddGiftActivity::class.java)
+            val intent = Intent(this, AddGiftActivity::class.java).also { it.addCategory(Intent.ACTION_OPEN_DOCUMENT) }
             startActivity(intent)
         }
 
@@ -35,7 +42,15 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
         db = AppDatabase.getInstance(this)!!
         giftDao = db.getGiftDao()
 
-        getAllGiftList()
+        if(!hasPermissions(this)){
+            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
+        }else{
+            getAllGiftList()
+        }
+    }
+
+    fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all{
+        ContextCompat.checkSelfPermission(context,it) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getAllGiftList() {
@@ -77,6 +92,21 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
             }
         )
         builder.show()
+    }
+//권한요청
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == PERMISSIONS_REQUIREST_CODE){
+            if(PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()){
+                Toast.makeText(this@MainActivity,"권한요청이 승인되었습니다.",Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(this@MainActivity, "권한요청이 거부되었습니다.",Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun deleteGift(position: Int) {

@@ -2,15 +2,25 @@ package com.example.giftwallet
 
 import android.app.Activity
 import android.content.Intent
+import android.content.Context
+
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
-
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
+import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.io.IOException
 
 class AddGiftActivity : AppCompatActivity() {
 
@@ -20,8 +30,13 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var giftimageurl : String
 
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
+    // When using Latin script library
+//    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-//    var gifturl : String = binding.tvUrl.text.toString()
+//    // When using Korean script library
+//    val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,15 +114,19 @@ class AddGiftActivity : AppCompatActivity() {
 
                 val uri = data.data as Uri
 
+
                 giftimageurl = uri.toString()
                 binding.tvUrl.text = uri.toString()
                 binding.ivAddgift.setImageURI(uri)
+
 
                 binding.edtTitle.text.toString()
 
                 Toast.makeText(this, "사진URI$binding.tvUrl.text.", Toast.LENGTH_SHORT).show()
 
-                // 이미지 URI를 가지고 하고 싶은거 하면 된다.
+
+//                이미지 텍스트 인식
+                imageFromPath(this,uri)
             }
 
             else -> {
@@ -115,4 +134,81 @@ class AddGiftActivity : AppCompatActivity() {
             }
         }
     }
+
+//    이미지 텍스트 추출
+
+    private fun recognizeText(image: InputImage) {
+
+//        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+
+        // [START run_detector]
+        val result = recognizer.process(image)
+            .addOnSuccessListener { visionText ->
+                // Task completed successfully
+                // [START_EXCLUDE]
+                // [START get_text]
+                for (block in visionText.textBlocks) {
+                    val boundingBox = block.boundingBox
+                    val cornerPoints = block.cornerPoints
+                    val text = block.text
+
+                    for (line in block.lines) {
+                        // ...
+                        for (element in line.elements) {
+                            // ...
+                        }
+                    }
+                }
+                // [END get_text]
+                // [END_EXCLUDE]
+            }
+            .addOnFailureListener { e ->
+                // Task failed with an exception
+                // ...
+            }
+        // [END run_detector]
+//        processTextBlock(result)
+    }
+
+//    private fun processTextBlock(result: Text) {
+//        // [START mlkit_process_text_block]
+//        val resultText = result.text
+//        for (block in result.textBlocks) {
+//            val blockText = block.text
+//            val blockCornerPoints = block.cornerPoints
+//            val blockFrame = block.boundingBox
+//            for (line in block.lines) {
+//                val lineText = line.text
+//                val lineCornerPoints = line.cornerPoints
+//                val lineFrame = line.boundingBox
+//                for (element in line.elements) {
+//                    val elementText = element.text
+//                    val elementCornerPoints = element.cornerPoints
+//                    val elementFrame = element.boundingBox
+//                }
+//            }
+//        }
+//        // [END mlkit_process_text_block]
+//    }
+
+//    private fun getTextRecognizer(): TextRecognizer {
+//        // [START mlkit_local_doc_recognizer]
+//        return TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+//        // [END mlkit_local_doc_recognizer]
+//    }
+
+    private fun imageFromPath(context: Context, uri: Uri) {
+        // [START image_from_path]
+        val image: InputImage
+        try {
+            image = InputImage.fromFilePath(context, uri)
+            recognizeText(image)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        // [END image_from_path]
+    }
+
+
 }
