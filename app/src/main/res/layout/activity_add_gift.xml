@@ -63,10 +63,6 @@
             android:layout_height="wrap_content"
             android:text="@string/importance_middle" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <RadioButton
             android:id="@+id/btn_high"
@@ -140,10 +136,14 @@
         tools:visibility="visible" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinner"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="527dp"
-        android:spinnerMode="dialog"/>
+        android:spinnerMode="dialog"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_completion"
+        app:layout_constraintEnd_toEndOf="@+id/btn_completion"
+        app:layout_constraintStart_toStartOf="@+id/btn_completion"
+        app:layout_constraintTop_toBottomOf="@+id/edt_info"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

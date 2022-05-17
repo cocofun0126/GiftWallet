@@ -149,18 +149,23 @@ class AddGiftActivity : AppCompatActivity() {
 //                텍스트 보자
                 binding.edtInfo.setText(visionText.text)
                 giftimageinfo = visionText.text
+                var tmptxt = visionText.text.lines()
+
+//                ArrayAdapter.createFromResource(
+//                    this,
+//                    android.R.layout.simple_spinner_item,
+//                    tmptxt
+//                ).also { adapter ->
+//                    // Specify the layout to use when the list of choices appears
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    // Apply the adapter to the spinner
+//                    binding.spinner.adapter = adapter
+//                }
+
+                val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,tmptxt)
+                binding.spinner.adapter = aa
 
 
-                ArrayAdapter.createFromResource(
-                    this,
-                    visionText.hashCode(),
-                    android.R.layout.simple_spinner_item
-                ).also { adapter ->
-                    // Specify the layout to use when the list of choices appears
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    // Apply the adapter to the spinner
-                    binding.spinner2.adapter = adapter
-                }
 
                 for (block in visionText.textBlocks) {
 //                    block.boundingBox?.set(31,19,59,8)
@@ -168,11 +173,18 @@ class AddGiftActivity : AppCompatActivity() {
                     val cornerPoints = block.cornerPoints
                     val text = block.text
 
-
                     for (line in block.lines) {
                         line.toString()
+                        val lineText = line.text
+                        val lineCornerPoints = line.cornerPoints
+                        val lineFrame = line.boundingBox
+
                         for (element in line.elements) {
                             element.toString()
+                            val elementText = element.text
+                            val elementCornerPoints = element.cornerPoints
+                            val elementFrame = element.boundingBox
+
                         }
                     }
                 }
