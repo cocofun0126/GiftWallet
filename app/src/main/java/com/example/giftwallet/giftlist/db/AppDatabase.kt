@@ -5,7 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(GiftEntity::class), version = 21)
+@Database(entities = arrayOf(GiftEntity::class, BrandEntity::class), version = 22)
+
 abstract class AppDatabase :RoomDatabase() {
     abstract fun getGiftDao():GiftDao
     abstract fun getBrandDao():BrandDao

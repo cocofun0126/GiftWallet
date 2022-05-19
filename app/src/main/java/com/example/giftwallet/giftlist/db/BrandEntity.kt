@@ -5,10 +5,11 @@ import android.media.Image
 import android.widget.ImageView
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Fts4
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "BrandEntity")
+//@Fts4
+@Entity(tableName = "BrandEntity", primaryKeys = ["brand"])
 data class BrandEntity(
-    @PrimaryKey(autoGenerate = true) var id: Int? = null,
-    @ColumnInfo(name = "brand") var brand: String
+    var brand: String
 )
