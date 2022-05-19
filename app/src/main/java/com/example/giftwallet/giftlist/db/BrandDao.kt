@@ -6,12 +6,12 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface GiftDao {
-    @Query("SELECT * FROM GIFTENTITY")
-    fun getAllGift() : List<GiftEntity>
+interface BrandDao {
+    @Query("SELECT * FROM BRANDENTITY")
+    fun getAllBrand() : List<BrandEntity>
 
     @Insert
-    fun insertGift(gift:GiftEntity)
+    fun insertBrand(brand:BrandEntity)
     @Delete
-    fun deleteGift(gift:GiftEntity)
+    fun deleteBrand(brand:BrandEntity)
 }

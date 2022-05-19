@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = arrayOf(GiftEntity::class), version = 21)
 abstract class AppDatabase :RoomDatabase() {
     abstract fun getGiftDao():GiftDao
+    abstract fun getBrandDao():BrandDao
 
     companion object{
         val databaseName = "db_gift"

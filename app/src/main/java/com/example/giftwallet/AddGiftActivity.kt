@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
+import com.example.giftwallet.giftlist.db.BrandDao
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
 import com.google.mlkit.vision.common.InputImage
@@ -28,6 +29,7 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddGiftBinding
     lateinit var db : AppDatabase
     lateinit var giftDao : GiftDao
+    lateinit var brandDao : BrandDao
     lateinit var giftimageurl : String
     lateinit var giftimageinfo : String
 
@@ -48,6 +50,8 @@ class AddGiftActivity : AppCompatActivity() {
 
         db = AppDatabase.getInstance(this)!!
         giftDao = db.getGiftDao()
+        brandDao = db.getBrandDao()
+
 
         binding.btnCompletion.setOnClickListener{
             insertGift()
@@ -151,6 +155,7 @@ class AddGiftActivity : AppCompatActivity() {
                 giftimageinfo = visionText.text
                 var tmptxt = visionText.text.lines()
 
+
 //                ArrayAdapter.createFromResource(
 //                    this,
 //                    android.R.layout.simple_spinner_item,
@@ -164,8 +169,6 @@ class AddGiftActivity : AppCompatActivity() {
 
                 val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,tmptxt)
                 binding.spinner.adapter = aa
-
-
 
                 for (block in visionText.textBlocks) {
 //                    block.boundingBox?.set(31,19,59,8)

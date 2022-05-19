@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftwallet.databinding.ActivityMainBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
+import com.example.giftwallet.giftlist.db.BrandDao
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
 
     private lateinit var db : AppDatabase
     private lateinit var giftDao: GiftDao
+    private lateinit var brandDao: BrandDao
     private lateinit var giftList: ArrayList<GiftEntity>
     private lateinit var adapter: GiftRecyclerViewAdapter
 
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
         // DB 인스턴스를 가져오고 DB작업을 할 수 있는 DAO를 가져옵니다.
         db = AppDatabase.getInstance(this)!!
         giftDao = db.getGiftDao()
+        brandDao = db.getBrandDao()
 
         if(!hasPermissions(this)){
             requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  { // ❶
 
     private fun getAllGiftList() {
         Thread {
-            giftList = ArrayList(giftDao.getAll())
+            giftList = ArrayList(giftDao.getAllGift())
             setRecyclerView()
         }.start()
     }
