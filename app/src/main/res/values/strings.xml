@@ -5,6 +5,8 @@
     <!-- AddTodoActivity text -->
     <string name="title">제목</string>
     <string name="hint_title">해야 할 일을 입력해주세요.</string>
+    <string name="hint_brand">브랜드명</string>
+
     <string name="importance">중요도</string>
     <string name="importance_low">낮음</string>
     <string name="importance_middle">중간</string>

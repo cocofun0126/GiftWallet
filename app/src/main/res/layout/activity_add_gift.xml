@@ -33,22 +33,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <TextView
-        android:id="@+id/importance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/edt_brand"
+        android:layout_width="203dp"
+        android:layout_height="26dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/importance"
+        android:hint="@string/hint_brand"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_brand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_title" />
+        app:layout_constraintTop_toTopOf="@+id/spinner_brand" />
 
     <RadioGroup
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/importance">
 
         <RadioButton
@@ -72,6 +79,16 @@
 
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/importance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/importance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_title" />
+
     <Button
         android:id="@+id/btn_completion"
         android:layout_width="0dp"
@@ -84,6 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <Button
         android:id="@+id/btn_galary"
         android:layout_width="wrap_content"
@@ -91,11 +109,10 @@
         android:text="갤러리"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
+        app:layout_constraintVertical_bias="0.45" />
 
     <TextView
         android:id="@+id/tv_url"
@@ -104,9 +121,10 @@
         android:text="imageURL"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintStart_toEndOf="@+id/btn_galary"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
 
     <EditText
         android:id="@+id/edt_info"
@@ -129,21 +147,35 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.644"
+        app:layout_constraintVertical_bias="0.59"
         tools:visibility="visible" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner_detail"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/btn_completion"
         app:layout_constraintEnd_toEndOf="@+id/btn_completion"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="@+id/btn_completion"
         app:layout_constraintTop_toBottomOf="@+id/edt_info"
+        app:layout_constraintVertical_bias="0.037"
         tools:visibility="visible" />
+
+    <Spinner
+        android:id="@+id/spinner_brand"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btn_completion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.004"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_detail"
+        app:layout_constraintVertical_bias="0.054" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

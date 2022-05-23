@@ -122,6 +122,9 @@ class AddGiftActivity : AppCompatActivity() {
                 val uri = data.data as Uri
 
 
+//                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                getContentResolver().takePersistablePermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
                 giftimageurl = uri.toString()
                 binding.tvUrl.text = uri.toString()
                 binding.ivAddgift.setImageURI(uri)
@@ -153,22 +156,55 @@ class AddGiftActivity : AppCompatActivity() {
 //                텍스트 보자
                 binding.edtInfo.setText(visionText.text)
                 giftimageinfo = visionText.text
-                var tmptxt = visionText.text.lines()
+                var tmptxt_n = giftimageinfo.replace("\n","|").replace(" ","|") // newline |로 변환
+                var tmptxt_split = tmptxt_n.split("|") //띄워쓰기 기준 변환
+                var tmptxt_listset = tmptxt_split.toSet() //중복제거
+                var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>())
 
 
-//                ArrayAdapter.createFromResource(
-//                    this,
-//                    android.R.layout.simple_spinner_item,
-//                    tmptxt
-//                ).also { adapter ->
-//                    // Specify the layout to use when the list of choices appears
-//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//                    // Apply the adapter to the spinner
-//                    binding.spinner.adapter = adapter
-//                }
+//                val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,tmptxt_n)
+//                binding.spinnerDetail.adapter = aa
 
-                val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,tmptxt)
-                binding.spinner.adapter = aa
+//                입력값과 array 입력값 비교해야한다.
+//                for (brand in tmptxt)
+
+                val brandarray = resources.getStringArray(R.array.brand_array)
+//                https://kkh0977.tistory.com/650
+//                1. ArrayList : 코틀린에서 동적 배열 역할을 수행합니다
+//                2. contains : 특정 값이 포함된 여부를 확인합니다
+//                3. indexOf : 특정 데이터 인덱스 값을 확인합니다
+
+
+                val arrayList = brandarray.toCollection(ArrayList<String>())//xml에 입력된 브랜드 array
+//                gall_arraylist 갤러리에서 불러온 단어들
+
+
+
+                //특정 데이터 인덱스값 확인 실시
+                for (i in arrayList) {
+                    var int_idx = gall_arraylist.indexOf(i)
+
+                    println("[둘] 인덱스 : " + int_idx)
+
+                }
+
+//                tmptxt_listset.containsAll(R.array.brand_array)
+                ArrayAdapter.createFromResource(
+                    this,
+                    R.array.brand_array,
+                    android.R.layout.simple_spinner_item
+                ).also { adapter ->
+                    // Specify the layout to use when the list of choices appears
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    // Apply the adapter to the spinner
+                    binding.spinnerBrand.adapter = adapter
+                }
+
+
+//                val aaa = ArrayAdapter(this,android.R.layout.simple_spinner_item,android.R.id.brand_array)
+//                binding.spinnerBrand.adapter = aaa
+
+
 
                 for (block in visionText.textBlocks) {
 //                    block.boundingBox?.set(31,19,59,8)
