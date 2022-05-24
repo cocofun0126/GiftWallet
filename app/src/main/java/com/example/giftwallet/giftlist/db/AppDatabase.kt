@@ -12,6 +12,7 @@ abstract class AppDatabase :RoomDatabase() {
     abstract fun getGiftDao():GiftDao
     abstract fun getBrandDao():BrandDao
 
+
     companion object{
         val databaseName = "db_gift"
         var appDatabase : AppDatabase? = null

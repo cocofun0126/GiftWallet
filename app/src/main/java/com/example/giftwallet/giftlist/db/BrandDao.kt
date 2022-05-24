@@ -10,6 +10,7 @@ interface BrandDao {
     @Query("SELECT * FROM BRANDENTITY")
     fun getAllBrand() : List<BrandEntity>
 
+
     @Insert
     fun insertBrand(brand:BrandEntity)
     @Delete

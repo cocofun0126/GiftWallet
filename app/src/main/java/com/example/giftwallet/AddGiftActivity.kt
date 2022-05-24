@@ -148,6 +148,7 @@ class AddGiftActivity : AppCompatActivity() {
 //                }
 
 
+
                 temp = data
                 giftimageurl = uri.toString()
                 binding.tvUrl.text = uri.toString()

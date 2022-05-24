@@ -82,10 +82,6 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
 //            권한요청
             requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
         }
-
-
-
-
     }
 
     fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all{
