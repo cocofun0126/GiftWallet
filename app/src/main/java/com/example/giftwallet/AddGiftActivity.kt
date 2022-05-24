@@ -220,6 +220,7 @@ class AddGiftActivity : AppCompatActivity() {
                 }
 
 
+
                 //특정 데이터 인덱스값 확인 실시
                 for (i in arrayList) {
                     if(gall_arraylist.contains(i) == true) {

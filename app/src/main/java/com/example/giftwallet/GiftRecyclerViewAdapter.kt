@@ -54,9 +54,6 @@ class GiftRecyclerViewAdapter(
 //        이미지 추가
         holder.iv_icon.setImageURI(giftData.imagerurl.toUri())
 
-
-
-
     }
 
     override fun getItemCount(): Int {

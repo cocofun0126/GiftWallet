@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
     private lateinit var giftList: ArrayList<GiftEntity>
     private lateinit var adapter: GiftRecyclerViewAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
