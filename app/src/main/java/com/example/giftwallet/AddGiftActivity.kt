@@ -13,6 +13,7 @@ import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
 import com.example.giftwallet.giftlist.db.BrandDao
@@ -206,15 +207,6 @@ class AddGiftActivity : AppCompatActivity() {
 //                gall_arraylist 갤러리에서 불러온 단어들
 
 
-
-                //특정 데이터 인덱스값 확인 실시
-                for (i in arrayList) {
-                    var int_idx = gall_arraylist.indexOf(i)
-
-                    println("[둘] 인덱스 : " + int_idx)
-
-                }
-
 //                tmptxt_listset.containsAll(R.array.brand_array)
                 ArrayAdapter.createFromResource(
                     this,
@@ -227,6 +219,19 @@ class AddGiftActivity : AppCompatActivity() {
                     binding.spinnerBrand.adapter = adapter
                 }
 
+
+                //특정 데이터 인덱스값 확인 실시
+                for (i in arrayList) {
+                    if(gall_arraylist.contains(i) == true) {
+//                        println("테스트 : " + arrayList.indexOf(i))
+//              인덱스 지정해놓기
+                        binding.spinnerBrand.setSelection(arrayList.indexOf(i))
+                        break
+                    }else{
+                        binding.spinnerBrand.setSelection(arrayList.lastIndex)
+                    }
+
+                }
 
 //                val aaa = ArrayAdapter(this,android.R.layout.simple_spinner_item,android.R.id.brand_array)
 //                binding.spinnerBrand.adapter = aaa
