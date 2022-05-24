@@ -1,13 +1,9 @@
 package com.example.giftwallet
 
-import android.content.Context
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.giftwallet.databinding.ItemGiftBinding
 import com.example.giftwallet.giftlist.db.GiftEntity
 
@@ -65,5 +61,6 @@ class GiftRecyclerViewAdapter(
     override fun getItemCount(): Int {
         return giftList.size
     }
+
 }
 

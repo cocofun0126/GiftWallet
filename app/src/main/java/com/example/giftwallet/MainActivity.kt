@@ -6,10 +6,13 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.Intent.*
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftwallet.databinding.ActivityMainBinding
@@ -23,6 +26,15 @@ private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.READ_EXTERNAL_STO
                                             ,Manifest.permission.WRITE_EXTERNAL_STORAGE
                                             ,Manifest.permission.ACCESS_FINE_LOCATION
 )
+
+
+
+val CAMERA = arrayOf(Manifest.permission.CAMERA)
+val STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+val CAMERA_CODE = 98
+val STORAGE_CODE = 99
+
+
 
 
 class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
@@ -56,11 +68,24 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         giftDao = db.getGiftDao()
         brandDao = db.getBrandDao()
 
-        if(!hasPermissions(this)){
-            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
-        }else{
+//        if(!hasPermissions(this)){
+//            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
+//        }else{
+//            getAllGiftList()
+//        }
+
+        if (checkPermission(STORAGE, STORAGE_CODE)) {
+//            val itt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//            startActivityForResult(itt, STORAGE_CODE)
             getAllGiftList()
+        }else{
+//            권한요청
+            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)
         }
+
+
+
+
     }
 
     fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all{
@@ -113,14 +138,49 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PERMISSIONS_REQUIREST_CODE){
-            if(PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()){
-                Toast.makeText(this@MainActivity,"권한요청이 승인되었습니다.",Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(this@MainActivity, "권한요청이 거부되었습니다.",Toast.LENGTH_LONG).show()
+//        if(requestCode == PERMISSIONS_REQUIREST_CODE){
+//            if(PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()){
+//                Toast.makeText(this@MainActivity,"권한요청이 승인되었습니다.",Toast.LENGTH_LONG).show()
+//            }else{
+//                Toast.makeText(this@MainActivity, "권한요청이 거부되었습니다.",Toast.LENGTH_LONG).show()
+//
+//            }
+//        }
 
+        when (requestCode) {
+//            CAMERA_CODE -> {
+//                for (grant in grantResults) {
+//                    if (grant != PackageManager.PERMISSION_GRANTED) {
+//                        Toast.makeText(this, "카메라 권한을 승인해 주세요.", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+//            }
+            STORAGE_CODE -> {
+                for (grant in grantResults) {
+                    if (grant != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "저장소 권한을 승인해 주세요.", Toast.LENGTH_LONG).show()
+                        //finish() 앱을 종료함
+                    }
+                }
             }
         }
+    }
+
+
+
+//checkPermission 메서드도 카메라, 저장소등 다른 권한들도 확인이 가능하도록 아래와 같이 수정합니다.
+    fun checkPermission(permissions: Array<out String>, type: Int): Boolean
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (permission in permissions) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, permissions, type)
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private fun deleteGift(position: Int) {

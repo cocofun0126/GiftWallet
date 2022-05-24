@@ -1,13 +1,15 @@
 package com.example.giftwallet
 
 import android.app.Activity
-import android.content.Intent
+import android.content.ContentValues
 import android.content.Context
-
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +19,12 @@ import com.example.giftwallet.giftlist.db.BrandDao
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+
 
 class AddGiftActivity : AppCompatActivity() {
 
@@ -33,7 +35,12 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var giftimageurl : String
     lateinit var giftimageinfo : String
 
+    lateinit var temp : Intent
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
+
+//    https://lab.cliel.com/283
+
+
     // When using Latin script library
 //    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -68,6 +75,7 @@ class AddGiftActivity : AppCompatActivity() {
         val giftTitle = binding.edtTitle.text.toString()
         var giftImportance = binding.radioGroup.checkedRadioButtonId
         var giftInfo = binding.edtInfo
+        val data = temp
 
 
         when(giftImportance){
@@ -84,12 +92,23 @@ class AddGiftActivity : AppCompatActivity() {
                 giftImportance = 0
             }
         }
+        var newuri : String = ""
+
+        val imageUri = data.data
+        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+
+//        val extension = MimeTypeMap.getFileExtensionFromUrl(imageUri.toString())
+
+        if (imageUri != null) {
+//            var img = data?.extras?.get("data") as Bitmap
+            newuri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
+        }
 
         if(giftImportance== 0||giftTitle.isBlank()){
             Toast.makeText(this, "모든항목을 채워주세요.",Toast.LENGTH_SHORT).show()
         }else{
             Thread{
-                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance, giftimageurl, giftimageinfo))
+                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance,newuri, giftimageinfo))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -97,6 +116,7 @@ class AddGiftActivity : AppCompatActivity() {
             }.start()
         }
     }
+
     private fun getImageFromGalary(){
         val intent = Intent()
         intent.type = "image/*"
@@ -120,21 +140,21 @@ class AddGiftActivity : AppCompatActivity() {
                 data?:return
 
                 val uri = data.data as Uri
-
-
 //                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 //                getContentResolver().takePersistablePermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
+//                if (data?.extras?.get("data") != null) {
+//                    val img = data?.extras?.get("data") as Bitmap
+//                }
+
+
+                temp = data
                 giftimageurl = uri.toString()
                 binding.tvUrl.text = uri.toString()
                 binding.ivAddgift.setImageURI(uri)
-
-
                 binding.edtTitle.text.toString()
 
                 Toast.makeText(this, "사진URI$binding.tvUrl.text.", Toast.LENGTH_SHORT).show()
-
-
 //                이미지 텍스트 인식
                 imageFromPath(this,uri)
             }
@@ -143,6 +163,12 @@ class AddGiftActivity : AppCompatActivity() {
                 Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+//파일명 생성
+    fun RandomFileName() : String
+    {
+        val fineName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
+        return fineName
     }
 
 //    이미지 텍스트 추출
@@ -276,4 +302,34 @@ class AddGiftActivity : AppCompatActivity() {
     }
 
 
+
+    fun saveFile(fileName: String, mimeType: String, bitmap: Bitmap): Uri?
+    {
+        var CV = ContentValues()
+        CV.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        CV.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            CV.put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, CV)
+
+        if (uri != null) {
+            var scriptor = contentResolver.openFileDescriptor(uri, "w")
+
+            if (scriptor != null) {
+                val fos = FileOutputStream(scriptor.fileDescriptor)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.close()
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    CV.clear()
+                    CV.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    contentResolver.update(uri, CV, null, null)
+                }
+            }
+        }
+        return uri;
+    }
 }
