@@ -3,12 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/defle/AndroidStudioProjects/GiftWallet/app/src/main/res/layout/activity_add_gift.xml" value="0.2" />
+        <entry key="..\:/Users/defle/AndroidStudioProjects/GiftWallet/app/src/main/res/layout/activity_add_gift.xml" value="0.264" />
         <entry key="..\:/Users/defle/AndroidStudioProjects/GiftWallet/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/defle/AndroidStudioProjects/GiftWallet/app/src/main/res/layout/item_gift.xml" value="0.4" />
-        <entry key="..\:/Users/defle/StudioProjects/GiftWallet/app/src/main/res/layout/activity_add_gift.xml" value="0.25" />
-        <entry key="..\:/Users/defle/StudioProjects/GiftWallet/app/src/main/res/layout/activity_main.xml" value="0.1875" />
-        <entry key="..\:/Users/defle/StudioProjects/GiftWallet/app/src/main/res/layout/item_gift.xml" value="0.1875" />
+        <entry key="..\:/Users/defle/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.2265625" />
       </map>
     </option>
   </component>

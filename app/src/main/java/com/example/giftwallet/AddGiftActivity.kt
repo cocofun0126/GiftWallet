@@ -190,11 +190,42 @@ class AddGiftActivity : AppCompatActivity() {
                 var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>())
 
 
-//                val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,tmptxt_n)
-//                binding.spinnerDetail.adapter = aa
+//                정규식 참고자료
+//                https://codechacha.com/ko/kotlin-how-to-use-regex/
 
-//                입력값과 array 입력값 비교해야한다.
-//                for (brand in tmptxt)
+//--------------유효기간 정규식 생성 START--------------
+                val valDateRegex1 = Regex("..년.*월.*일") // 2022년12월31일 -> 22년12월31일
+                val valDateRegex2 = Regex("..\\-..\\-..")//2022-12-31 -> 22-12-31
+                val valDateRegex3 = Regex("..\\...\\...")//2022.12.31 -> 22.12.31
+
+//                문자열 띄워쓰기 제거
+                var getDateStr = giftimageinfo.replace("\n","").replace(" ","")
+//                string에서 일자추출 정규식 적용 및 arraylist변환 필요!!!!!!!!!!!!!!!
+
+                val matchResult1: MatchResult? = valDateRegex1.find(getDateStr)
+                println("match value1: ${matchResult1?.value}")
+
+                val matchResult2: MatchResult? = valDateRegex2.find(getDateStr)
+                println("match value2: ${matchResult2?.value}")
+
+                val matchResult3: MatchResult? = valDateRegex3.find(getDateStr)
+                println("match value3: ${matchResult3?.value}")
+
+                if (matchResult1?.value != null){ //22년12월31일 -> 20221231
+                    binding.editTextDate.setText("20"+matchResult1?.value.toString()
+                        .replace("년","")
+                        .replace("월","")
+                        .replace("일",""))
+                }else if(matchResult2?.value != null){//22-12-31 -> 20221231
+                    binding.editTextDate.setText("20"+matchResult2?.value.toString()
+                        .replace("-",""))
+                }else if(matchResult3?.value != null){//22.12.31 -> 20221231
+                    binding.editTextDate.setText("20"+matchResult3?.value.toString()
+                        .replace(".",""))
+                }else{
+                    binding.editTextDate.setText("")
+                }
+//--------------유효기간 정규식 생성 END--------------
 
                 val brandarray = resources.getStringArray(R.array.brand_array)
 //                https://kkh0977.tistory.com/650
@@ -219,8 +250,6 @@ class AddGiftActivity : AppCompatActivity() {
                     binding.spinnerBrand.adapter = adapter
                 }
 
-
-
                 //특정 데이터 인덱스값 확인 실시
                 for (i in arrayList) {
                     if(gall_arraylist.contains(i) == true) {
@@ -228,11 +257,13 @@ class AddGiftActivity : AppCompatActivity() {
 //              인덱스 지정해놓기
                         binding.spinnerBrand.setSelection(arrayList.indexOf(i))
                         break
-                    }else{
+                    }
+                    else{
+//                        로직 개선의 여지 -> 매핑된 값 없으면 마지막(기타)로 매핑 한번만 처리
                         binding.spinnerBrand.setSelection(arrayList.lastIndex)
                     }
-
                 }
+
 
 //                val aaa = ArrayAdapter(this,android.R.layout.simple_spinner_item,android.R.id.brand_array)
 //                binding.spinnerBrand.adapter = aaa
