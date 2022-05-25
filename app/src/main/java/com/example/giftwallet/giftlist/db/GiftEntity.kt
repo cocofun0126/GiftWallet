@@ -12,7 +12,6 @@ import androidx.room.PrimaryKey
 data class GiftEntity(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
     @ColumnInfo(name = "title") var title: String,
-    @ColumnInfo(name = "importance") var importance: Int,
     @ColumnInfo(name = "imagerurl") var imagerurl: String,
     @ColumnInfo(name = "imageinfo") var imageinfo: String
 

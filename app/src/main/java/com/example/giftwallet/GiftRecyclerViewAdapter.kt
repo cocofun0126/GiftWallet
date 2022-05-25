@@ -36,18 +36,6 @@ class GiftRecyclerViewAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val giftData = giftList[position]
-        when (giftData.importance) {
-            1 -> {
-                holder.tv_importance.setBackgroundResource(R.color.red)
-            }
-            2 -> {
-                holder.tv_importance.setBackgroundResource(R.color.yellow)
-            }
-            3 -> {
-                holder.tv_importance.setBackgroundResource(R.color.green)
-            }
-        }
-        holder.tv_importance.text = giftData.importance.toString()
 
         holder.tv_title.text = giftData.title
 

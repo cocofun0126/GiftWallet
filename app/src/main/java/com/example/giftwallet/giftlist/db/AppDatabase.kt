@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import java.io.File
 
-@Database(entities = arrayOf(GiftEntity::class, BrandEntity::class), version = 33)
+@Database(entities = arrayOf(GiftEntity::class, BrandEntity::class), version = 34)
 
 abstract class AppDatabase :RoomDatabase() {
     abstract fun getGiftDao():GiftDao

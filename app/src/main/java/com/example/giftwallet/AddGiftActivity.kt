@@ -74,25 +74,10 @@ class AddGiftActivity : AppCompatActivity() {
 
     private fun insertGift(){
         val giftTitle = binding.edtTitle.text.toString()
-        var giftImportance = binding.radioGroup.checkedRadioButtonId
         var giftInfo = binding.edtInfo
         val data = temp
 
 
-        when(giftImportance){
-            R.id.btn_high->{
-                giftImportance = 3
-            }
-            R.id.btn_middle->{
-                giftImportance = 2
-            }
-            R.id.btn_low->{
-                giftImportance = 1
-            }
-            else->{
-                giftImportance = 0
-            }
-        }
         var newuri : String = ""
 
         val imageUri = data.data
@@ -105,11 +90,12 @@ class AddGiftActivity : AppCompatActivity() {
             newuri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
         }
 
-        if(giftImportance== 0||giftTitle.isBlank()){
+        if(giftTitle.isBlank()){
             Toast.makeText(this, "모든항목을 채워주세요.",Toast.LENGTH_SHORT).show()
         }else{
             Thread{
-                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance,newuri, giftimageinfo))
+                giftDao.insertGift(GiftEntity(null,giftTitle,newuri, giftimageinfo))
+//                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance,newuri, giftimageinfo))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
