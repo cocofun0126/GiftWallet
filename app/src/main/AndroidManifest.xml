@@ -32,12 +32,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GiftWallet"
         android:hardwareAccelerated="false" >
-
+        <activity android:name=".MainActivity"/>
         <activity
             android:name=".AddGiftActivity"
             android:exported="false" />
+
+        <!--        인트로-->
         <activity
-            android:name=".MainActivity"
+            android:name=".IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -57,7 +57,6 @@ class AddGiftActivity : AppCompatActivity() {
         giftDao = db.getGiftDao()
         brandDao = db.getBrandDao()
 
-
         binding.btnCompletion.setOnClickListener{
             insertGift()
         }
