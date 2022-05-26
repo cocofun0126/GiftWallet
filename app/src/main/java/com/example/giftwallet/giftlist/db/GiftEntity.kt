@@ -13,6 +13,7 @@ data class GiftEntity(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
     @ColumnInfo(name = "title") var title: String,
     @ColumnInfo(name = "imagerurl") var imagerurl: String,
-    @ColumnInfo(name = "imageinfo") var imageinfo: String
-
+    @ColumnInfo(name = "info") var info: String,
+    @ColumnInfo(name = "brand") var brand: String,
+    @ColumnInfo(name = "validate") var validate: String,
     )

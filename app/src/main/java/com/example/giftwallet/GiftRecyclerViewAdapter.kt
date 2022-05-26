@@ -14,7 +14,7 @@ class GiftRecyclerViewAdapter(
 
     inner class MyViewHolder(binding: ItemGiftBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val tv_importance = binding.tvImportance
+//        val tv_importance = binding.tvImportance
         val tv_title = binding.tvTitle
         //      이미지 추가
         var iv_icon = binding.ivIcon

@@ -9,11 +9,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
 import com.example.giftwallet.giftlist.db.BrandDao
@@ -41,7 +39,6 @@ class AddGiftActivity : AppCompatActivity() {
 
 //    https://lab.cliel.com/283
 
-
     // When using Latin script library
 //    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -66,36 +63,38 @@ class AddGiftActivity : AppCompatActivity() {
         }
 
 //        갤러리 연동
-        binding.btnGalary.setOnClickListener{
+        binding.ivAddgift.setOnClickListener{
             getImageFromGalary()
         }
+//        binding.btnGalary.setOnClickListener{
+//            getImageFromGalary()
+//        }
 
     }
 
     private fun insertGift(){
-        val giftTitle = binding.edtTitle.text.toString()
-        var giftInfo = binding.edtInfo
+        val giftTitle = binding.edtTitle.text.toString() //설명
+        var giftInfo = binding.edtInfo //내용(이미지 내용)
+        val giftBrand = binding.spinnerBrand.selectedItem.toString() // 브랜드명
+        val giftValidDate = binding.edtValidDate.text.toString() //유효기간 설정
+
         val data = temp
 
-
-        var newuri : String = ""
+        var savedUri : String = ""
 
         val imageUri = data.data
         val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
 
-//        val extension = MimeTypeMap.getFileExtensionFromUrl(imageUri.toString())
-
         if (imageUri != null) {
 //            var img = data?.extras?.get("data") as Bitmap
-            newuri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
+            savedUri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
         }
 
         if(giftTitle.isBlank()){
             Toast.makeText(this, "모든항목을 채워주세요.",Toast.LENGTH_SHORT).show()
         }else{
             Thread{
-                giftDao.insertGift(GiftEntity(null,giftTitle,newuri, giftimageinfo))
-//                giftDao.insertGift(GiftEntity(null,giftTitle,giftImportance,newuri, giftimageinfo))
+                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -133,8 +132,6 @@ class AddGiftActivity : AppCompatActivity() {
 //                if (data?.extras?.get("data") != null) {
 //                    val img = data?.extras?.get("data") as Bitmap
 //                }
-
-
 
                 temp = data
                 giftimageurl = uri.toString()
@@ -175,7 +172,6 @@ class AddGiftActivity : AppCompatActivity() {
                 var tmptxt_listset = tmptxt_split.toSet() //중복제거
                 var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>())
 
-
 //                정규식 참고자료
 //                https://codechacha.com/ko/kotlin-how-to-use-regex/
 
@@ -198,19 +194,32 @@ class AddGiftActivity : AppCompatActivity() {
                 println("match value3: ${matchResult3?.value}")
 
                 if (matchResult1?.value != null){ //22년12월31일 -> 20221231
-                    binding.editTextDate.setText("20"+matchResult1?.value.toString()
+                    binding.edtValidDate.setText("20"+matchResult1?.value.toString()
                         .replace("년","")
                         .replace("월","")
                         .replace("일",""))
                 }else if(matchResult2?.value != null){//22-12-31 -> 20221231
-                    binding.editTextDate.setText("20"+matchResult2?.value.toString()
+                    binding.edtValidDate.setText("20"+matchResult2?.value.toString()
                         .replace("-",""))
                 }else if(matchResult3?.value != null){//22.12.31 -> 20221231
-                    binding.editTextDate.setText("20"+matchResult3?.value.toString()
+                    binding.edtValidDate.setText("20"+matchResult3?.value.toString()
                         .replace(".",""))
                 }else{
-                    binding.editTextDate.setText("")
+                    binding.edtValidDate.setText("")
                 }
+
+//              날짜 유효성 체크
+                try {
+                    val dateFormatParser = SimpleDateFormat("yyyy/MM/dd") //검증할 날짜 포맷 설정
+                    dateFormatParser.isLenient = false //false일경우 처리시 입력한 값이 잘못된 형식일 시 오류가 발생
+                    dateFormatParser.parse(binding.edtValidDate.toString()) //대상 값 포맷에 적용되는지 확인
+                    true
+                } catch (e: Exception) {
+                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
+                    false
+                }
+
+
 //--------------유효기간 정규식 생성 END--------------
 
                 val brandarray = resources.getStringArray(R.array.brand_array)
@@ -222,7 +231,6 @@ class AddGiftActivity : AppCompatActivity() {
 
                 val arrayList = brandarray.toCollection(ArrayList<String>())//xml에 입력된 브랜드 array
 //                gall_arraylist 갤러리에서 불러온 단어들
-
 
 //                tmptxt_listset.containsAll(R.array.brand_array)
                 ArrayAdapter.createFromResource(
