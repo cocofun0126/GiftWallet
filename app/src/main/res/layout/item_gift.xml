@@ -36,7 +36,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_icon"
+        android:id="@+id/iv_gift_image"
         android:layout_width="66dp"
         android:layout_height="64dp"
         android:layout_gravity="center_vertical"

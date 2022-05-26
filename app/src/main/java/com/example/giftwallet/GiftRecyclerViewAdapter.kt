@@ -17,7 +17,7 @@ class GiftRecyclerViewAdapter(
 //        val tv_importance = binding.tvImportance
         val tv_title = binding.tvTitle
         //      이미지 추가
-        var iv_icon = binding.ivIcon
+        var iv_gift_image = binding.ivGiftImage
         val root = binding.root
     }
 
@@ -40,7 +40,7 @@ class GiftRecyclerViewAdapter(
         holder.tv_title.text = giftData.title
 
 //        이미지 추가
-        holder.iv_icon.setImageURI(giftData.imagerurl.toUri())
+        holder.iv_gift_image.setImageURI(giftData.imagerurl.toUri())
 
     }
 

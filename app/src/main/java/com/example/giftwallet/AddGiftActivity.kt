@@ -65,8 +65,10 @@ class AddGiftActivity : AppCompatActivity() {
         binding.ivAddgift.setOnClickListener{
             getImageFromGalary()
         }
-//        binding.btnGalary.setOnClickListener{
-//            getImageFromGalary()
+//        binding.ivAddgift.setOnLongClickListener{
+//
+////            zoomOut()
+//
 //        }
 
     }
