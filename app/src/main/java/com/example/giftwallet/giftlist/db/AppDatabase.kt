@@ -20,7 +20,8 @@ abstract class AppDatabase :RoomDatabase() {
         fun getInstance(context:Context) : AppDatabase?{
             if(appDatabase == null){
                 appDatabase = Room.databaseBuilder(context,AppDatabase::class.java,databaseName)
-//                    .createFromFile(File("C:/Users/defle/Desktop/brand.db"))
+                    .createFromAsset("database/BrandEntity.db")
+//                    .createFromFile(File("database/BrandEntity.db"))
                     .fallbackToDestructiveMigration() //앞 DB 삭제 후 다시 실행
                     .build()
             }

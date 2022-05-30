@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftwallet.databinding.ActivityMainBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
-import com.example.giftwallet.giftlist.db.BrandDao
+//import com.example.giftwallet.giftlist.db.BrandDao
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
 
     private lateinit var db : AppDatabase
     private lateinit var giftDao: GiftDao
-    private lateinit var brandDao: BrandDao
+//    private lateinit var brandDao: BrandDao
     private lateinit var giftList: ArrayList<GiftEntity>
     private lateinit var adapter: GiftRecyclerViewAdapter
 
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         db = AppDatabase.getInstance(this)!!
 
         giftDao = db.getGiftDao()
-        brandDao = db.getBrandDao()
+//        brandDao = db.getBrandDao()
 
 //        if(!hasPermissions(this)){
 //            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUIREST_CODE)

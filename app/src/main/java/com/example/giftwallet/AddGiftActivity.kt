@@ -13,16 +13,14 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
-import com.example.giftwallet.giftlist.db.AppDatabase
-import com.example.giftwallet.giftlist.db.BrandDao
-import com.example.giftwallet.giftlist.db.GiftDao
-import com.example.giftwallet.giftlist.db.GiftEntity
+import com.example.giftwallet.giftlist.db.*
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
+import com.example.giftwallet.giftlist.db.BrandDao
 
 
 class AddGiftActivity : AppCompatActivity() {
@@ -36,6 +34,9 @@ class AddGiftActivity : AppCompatActivity() {
 
     lateinit var temp : Intent
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
+
+
+    private var brandList: ArrayList<BrandEntity> = arrayListOf<BrandEntity>()
 
 //    https://lab.cliel.com/283
 
@@ -223,45 +224,60 @@ class AddGiftActivity : AppCompatActivity() {
 
 //--------------유효기간 정규식 생성 END--------------
 
-                val brandarray = resources.getStringArray(R.array.brand_array)
+                getAllBrandList() // brandList에 값 전달
+
+
+
+//                val brandarray = resources.getStringArray(R.array.brand_array)
+//                val brandarray = resources.getStringArray(R.array.brand_array)
 //                https://kkh0977.tistory.com/650
 //                1. ArrayList : 코틀린에서 동적 배열 역할을 수행합니다
 //                2. contains : 특정 값이 포함된 여부를 확인합니다
 //                3. indexOf : 특정 데이터 인덱스 값을 확인합니다
 
 
-                val arrayList = brandarray.toCollection(ArrayList<String>())//xml에 입력된 브랜드 array
+//                val arrayList = brandarray.toCollection(ArrayList<String>())//xml에 입력된 브랜드 array
 //                gall_arraylist 갤러리에서 불러온 단어들
 
 //                tmptxt_listset.containsAll(R.array.brand_array)
-                ArrayAdapter.createFromResource(
-                    this,
-                    R.array.brand_array,
-                    android.R.layout.simple_spinner_item
-                ).also { adapter ->
-                    // Specify the layout to use when the list of choices appears
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    // Apply the adapter to the spinner
-                    binding.spinnerBrand.adapter = adapter
-                }
+
+//                ArrayAdapter.createFromResource(
+//                    this,
+//                    R.array.brand_array,
+//                    android.R.layout.simple_spinner_item
+//                ).also { adapter ->
+//                    // Specify the layout to use when the list of choices appears
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    // Apply the adapter to the spinner
+//                    binding.spinnerBrand.adapter = adapter
+//                }
+
+                val aaa = ArrayAdapter(this
+                                      ,android.R.layout.simple_spinner_item
+                                      ,brandList)
+                binding.spinnerBrand.adapter = aaa
+
+
+
+
+
+
 
                 //특정 데이터 인덱스값 확인 실시
-                for (i in arrayList) {
-                    if(gall_arraylist.contains(i) == true) {
+                for (i in brandList) {
+                    if(gall_arraylist.contains(i.toString()) == true) {
 //                        println("테스트 : " + arrayList.indexOf(i))
 //              인덱스 지정해놓기
-                        binding.spinnerBrand.setSelection(arrayList.indexOf(i))
+                        binding.spinnerBrand.setSelection(brandList.indexOf(i))
                         break
                     }
                     else{
 //                        로직 개선의 여지 -> 매핑된 값 없으면 마지막(기타)로 매핑 한번만 처리
-                        binding.spinnerBrand.setSelection(arrayList.lastIndex)
+                        binding.spinnerBrand.setSelection(brandList.lastIndex)
                     }
                 }
 
 
-//                val aaa = ArrayAdapter(this,android.R.layout.simple_spinner_item,android.R.id.brand_array)
-//                binding.spinnerBrand.adapter = aaa
 
 
 
@@ -364,5 +380,14 @@ class AddGiftActivity : AppCompatActivity() {
             }
         }
         return uri;
+    }
+
+
+
+    private fun getAllBrandList() {
+        Thread {
+            brandList = ArrayList(brandDao.getAllBrand())
+//            setRecyclerView()
+        }.start()
     }
 }
