@@ -36,7 +36,8 @@ class AddGiftActivity : AppCompatActivity() {
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
 
 
-    private var brandList: ArrayList<BrandEntity> = arrayListOf<BrandEntity>()
+    private var brandList: ArrayList<String> = arrayListOf<String>()
+//    private var brandList: ArrayList<BrandEntity> = arrayListOf<BrandEntity>()
 
 //    https://lab.cliel.com/283
 
@@ -224,7 +225,7 @@ class AddGiftActivity : AppCompatActivity() {
 
 //--------------유효기간 정규식 생성 END--------------
 
-                getAllBrandList() // brandList에 값 전달
+                getAllBrandList(gall_arraylist) // brandList에 값 전달
 
 
 
@@ -252,30 +253,11 @@ class AddGiftActivity : AppCompatActivity() {
 //                    binding.spinnerBrand.adapter = adapter
 //                }
 
-                val aaa = ArrayAdapter(this
-                                      ,android.R.layout.simple_spinner_item
-                                      ,brandList)
-                binding.spinnerBrand.adapter = aaa
 
 
 
 
 
-
-
-                //특정 데이터 인덱스값 확인 실시
-                for (i in brandList) {
-                    if(gall_arraylist.contains(i.toString()) == true) {
-//                        println("테스트 : " + arrayList.indexOf(i))
-//              인덱스 지정해놓기
-                        binding.spinnerBrand.setSelection(brandList.indexOf(i))
-                        break
-                    }
-                    else{
-//                        로직 개선의 여지 -> 매핑된 값 없으면 마지막(기타)로 매핑 한번만 처리
-                        binding.spinnerBrand.setSelection(brandList.lastIndex)
-                    }
-                }
 
 
 
@@ -384,10 +366,34 @@ class AddGiftActivity : AppCompatActivity() {
 
 
 
-    private fun getAllBrandList() {
+    private fun getAllBrandList(gall_arraylist:ArrayList<String>) {
         Thread {
             brandList = ArrayList(brandDao.getAllBrand())
-//            setRecyclerView()
+            setBrandSpinner(gall_arraylist)
         }.start()
+    }
+
+    private fun setBrandSpinner(gall_arraylist:ArrayList<String>) {
+        runOnUiThread {
+            val adapter = ArrayAdapter(
+                this, android.R.layout.simple_spinner_item, brandList
+            )
+            binding.spinnerBrand.adapter = adapter
+
+            //특정 데이터 인덱스값 확인 실시
+            for (i in brandList) {
+                if(gall_arraylist.contains(i) == true) {
+//                        println("테스트 : " + arrayList.indexOf(i))
+//              인덱스 지정해놓기
+                    binding.spinnerBrand.setSelection(brandList.indexOf(i))
+                    break
+                }
+                else{
+//                        로직 개선의 여지 -> 매핑된 값 없으면 마지막(기타)로 매핑 한번만 처리
+                    binding.spinnerBrand.setSelection(brandList.lastIndex)
+                    println("lastindex" + brandList.lastIndex)
+                }
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface BrandDao {
     @Query("SELECT * FROM BRANDENTITY")
-    fun getAllBrand() : List<BrandEntity>
+    fun getAllBrand() : List<String>
 
 
     @Insert
