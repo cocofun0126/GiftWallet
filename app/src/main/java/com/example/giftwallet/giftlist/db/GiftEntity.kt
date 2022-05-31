@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "GiftEntity")
 data class GiftEntity(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
-//    @ColumnInfo(name = "title") var title: String,
+//    @ColumnInfo(name = "orgurl") var orgurl: String,
     @ColumnInfo(name = "imagerurl") var imagerurl: String,
     @ColumnInfo(name = "info") var info: String,
     @ColumnInfo(name = "brand") var brand: String,

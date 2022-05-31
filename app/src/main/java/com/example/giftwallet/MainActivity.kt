@@ -96,6 +96,10 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         }.start()
     }
 
+
+
+
+
     private fun setRecyclerView() {
         // 리사이클러뷰 설정
         runOnUiThread {
@@ -116,7 +120,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
      * */
     override fun onLongClick(position: Int) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle("상품 삭제")
+        builder.setTitle("기프티콘 삭제")
         builder.setMessage("정말 삭제하시겠습니까?")
         builder.setNegativeButton("취소", null)
         builder.setPositiveButton("네",
@@ -176,7 +180,6 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
                 }
             }
         }
-
         return true;
     }
 
@@ -190,8 +193,4 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
             }
         }.start()
     }
-
-
-
-
 }

@@ -35,6 +35,7 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var temp : Intent
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
 
+    private var giftCheckUrl:Int ?= null
 
     private var brandList: ArrayList<String> = arrayListOf<String>()
 //    private var brandList: ArrayList<BrandEntity> = arrayListOf<BrandEntity>()
@@ -266,15 +267,6 @@ class AddGiftActivity : AppCompatActivity() {
 //                }
 
 
-
-
-
-
-
-
-
-
-
                 for (block in visionText.textBlocks) {
 //                    block.boundingBox?.set(31,19,59,8)
                     val boundingBox = block.boundingBox
@@ -403,7 +395,6 @@ class AddGiftActivity : AppCompatActivity() {
                     binding.spinnerBrand.setSelection(brandList.lastIndex)
                 }
             }
-//            if(gall_arraylist.contains("사용완료") == true or gall_arraylist.contains("사용") == true or gall_arraylist.contains("완료") == true){
             if(gall_arraylist.contains("사용완료") == true) {
                 binding.radioGroup.check(binding.btnY.id)
             }else if((gall_arraylist.contains("사용") == true) and (gall_arraylist.contains("완료") == true)) {
@@ -414,6 +405,12 @@ class AddGiftActivity : AppCompatActivity() {
                 binding.radioGroup.check(binding.btnN.id)
             }
         }
+    }
+    private fun giftCheckUrl(url:String) {
+        Thread {
+            giftCheckUrl = giftDao.getGiftCheckUrl(url)
+//            setRecyclerView()
+        }.start()
     }
 }
 
