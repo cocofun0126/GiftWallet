@@ -406,7 +406,7 @@ class AddGiftActivity : AppCompatActivity() {
 //            if(gall_arraylist.contains("사용완료") == true or gall_arraylist.contains("사용") == true or gall_arraylist.contains("완료") == true){
             if(gall_arraylist.contains("사용완료") == true) {
                 binding.radioGroup.check(binding.btnY.id)
-            }else if(gall_arraylist.contains("사용") == true and (gall_arraylist.contains("완료") == true)) {
+            }else if((gall_arraylist.contains("사용") == true) and (gall_arraylist.contains("완료") == true)) {
                 binding.radioGroup.check(binding.btnY.id)
             }else if(gall_arraylist.contains("미사용") == true) {
                 binding.radioGroup.check(binding.btnN.id)

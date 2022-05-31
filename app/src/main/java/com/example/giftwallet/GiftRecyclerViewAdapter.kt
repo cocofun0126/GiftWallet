@@ -20,6 +20,7 @@ class GiftRecyclerViewAdapter(
         var iv_gift_image = binding.ivGiftImage
         var tv_brand = binding.tvBrand
         var tv_validate = binding.tvValidate
+        var tv_useyn = binding.tvUseyn
 
         val root = binding.root
     }
@@ -47,6 +48,14 @@ class GiftRecyclerViewAdapter(
         holder.tv_brand.text = giftData.brand
         holder.tv_validate.text = giftData.validate
 
+        when(giftData.useyn){
+            0->{
+                holder.tv_useyn.text = "사용"
+            }
+            1->{
+                holder.tv_useyn.text = "미사용"
+            }
+        }
 
     }
 

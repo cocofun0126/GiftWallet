@@ -9,16 +9,16 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="320dp"
-        android:layout_height="65dp"
+        android:layout_width="336dp"
+        android:layout_height="70dp"
         android:text="GO TO GYM"
         android:textAlignment="viewStart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.764"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/iv_gift_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.857" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/iv_gift_image"
@@ -61,6 +61,39 @@
         app:layout_constraintStart_toEndOf="@+id/tv_validate"
         app:layout_constraintTop_toTopOf="@+id/tv_validate"
         app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.303" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="406dp"
+        android:layout_height="4dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tv_useyn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용여부"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_brand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_brand"
+        app:layout_constraintTop_toTopOf="@+id/tv_brand"
+        app:layout_constraintVertical_bias="0.074" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
