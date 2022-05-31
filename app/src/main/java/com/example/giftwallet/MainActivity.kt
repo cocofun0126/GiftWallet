@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
      * */
     override fun onLongClick(position: Int) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle("할 일 삭제")
+        builder.setTitle("상품 삭제")
         builder.setMessage("정말 삭제하시겠습니까?")
         builder.setNegativeButton("취소", null)
         builder.setPositiveButton("네",

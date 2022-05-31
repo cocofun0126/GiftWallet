@@ -76,10 +76,11 @@ class AddGiftActivity : AppCompatActivity() {
     }
 
     private fun insertGift(){
-        val giftTitle = binding.edtTitle.text.toString() //설명
-        var giftInfo = binding.edtInfo //내용(이미지 내용)
+//        val giftTitle = binding.edtTitle.text.toString() //설명
+        var giftInfo = binding.edtInfo.toString() //내용(이미지 내용)
         val giftBrand = binding.spinnerBrand.selectedItem.toString() // 브랜드명
         val giftValidDate = binding.edtValidDate.text.toString() //유효기간 설정
+        var giftUseYn = binding.radioGroup.checkedRadioButtonId //쿠폰 사용여부
 
         val data = temp
 
@@ -93,11 +94,22 @@ class AddGiftActivity : AppCompatActivity() {
             savedUri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
         }
 
-        if(giftTitle.isBlank()){
+//        사용여부
+        when(giftUseYn){
+            R.id.btn_y->{
+                giftUseYn = 0
+            }
+            R.id.btn_n->{
+                giftUseYn = 1
+            }
+        }
+
+        if(giftInfo.isBlank()){
             Toast.makeText(this, "모든항목을 채워주세요.",Toast.LENGTH_SHORT).show()
         }else{
             Thread{
-                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
+//                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
+                giftDao.insertGift(GiftEntity(null,savedUri, giftimageinfo, giftBrand, giftValidDate, giftUseYn))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -140,7 +152,7 @@ class AddGiftActivity : AppCompatActivity() {
                 giftimageurl = uri.toString()
                 binding.tvUrl.text = uri.toString()
                 binding.ivAddgift.setImageURI(uri)
-                binding.edtTitle.text.toString()
+//                binding.edtTitle.text.toString()
 
                 Toast.makeText(this, "사진URI$binding.tvUrl.text.", Toast.LENGTH_SHORT).show()
 //                이미지 텍스트 인식
@@ -173,7 +185,7 @@ class AddGiftActivity : AppCompatActivity() {
                 var tmptxt_n = giftimageinfo.replace("\n","|").replace(" ","|") // newline |로 변환
                 var tmptxt_split = tmptxt_n.split("|") //띄워쓰기 기준 변환
                 var tmptxt_listset = tmptxt_split.toSet() //중복제거
-                var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>())
+                var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>()) //collection으로 고유값 엔터라인 분기 arraylist
 
 //                정규식 참고자료
 //                https://codechacha.com/ko/kotlin-how-to-use-regex/
@@ -365,7 +377,6 @@ class AddGiftActivity : AppCompatActivity() {
     }
 
 
-
     private fun getAllBrandList(gall_arraylist:ArrayList<String>) {
         Thread {
             brandList = ArrayList(brandDao.getAllBrand())
@@ -383,7 +394,6 @@ class AddGiftActivity : AppCompatActivity() {
             //특정 데이터 인덱스값 확인 실시
             for (i in brandList) {
                 if(gall_arraylist.contains(i) == true) {
-//                        println("테스트 : " + arrayList.indexOf(i))
 //              인덱스 지정해놓기
                     binding.spinnerBrand.setSelection(brandList.indexOf(i))
                     break
@@ -391,9 +401,20 @@ class AddGiftActivity : AppCompatActivity() {
                 else{
 //                        로직 개선의 여지 -> 매핑된 값 없으면 마지막(기타)로 매핑 한번만 처리
                     binding.spinnerBrand.setSelection(brandList.lastIndex)
-                    println("lastindex" + brandList.lastIndex)
                 }
+            }
+//            if(gall_arraylist.contains("사용완료") == true or gall_arraylist.contains("사용") == true or gall_arraylist.contains("완료") == true){
+            if(gall_arraylist.contains("사용완료") == true) {
+                binding.radioGroup.check(binding.btnY.id)
+            }else if(gall_arraylist.contains("사용") == true and (gall_arraylist.contains("완료") == true)) {
+                binding.radioGroup.check(binding.btnY.id)
+            }else if(gall_arraylist.contains("미사용") == true) {
+                binding.radioGroup.check(binding.btnN.id)
+            }else{
+                binding.radioGroup.check(binding.btnN.id)
             }
         }
     }
 }
+
+

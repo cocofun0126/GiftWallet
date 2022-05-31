@@ -40,7 +40,7 @@ class GiftRecyclerViewAdapter(
 
         val giftData = giftList[position]
 
-        holder.tv_title.text = giftData.title
+//        holder.tv_title.text = giftData.title
 
 //        이미지 추가
         holder.iv_gift_image.setImageURI(giftData.imagerurl.toUri())
