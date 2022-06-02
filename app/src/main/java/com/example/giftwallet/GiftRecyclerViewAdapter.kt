@@ -15,7 +15,7 @@ class GiftRecyclerViewAdapter(
     inner class MyViewHolder(binding: ItemGiftBinding) :
         RecyclerView.ViewHolder(binding.root) {
 //        val tv_importance = binding.tvImportance
-        val tv_title = binding.tvTitle
+        val tv_info = binding.tvInfo
         //      이미지 추가
         var iv_gift_image = binding.ivGiftImage
         var tv_brand = binding.tvBrand
@@ -41,7 +41,7 @@ class GiftRecyclerViewAdapter(
 
         val giftData = giftList[position]
 
-//        holder.tv_title.text = giftData.title
+        holder.tv_info.text = giftData.info
 
 //        이미지 추가
         holder.iv_gift_image.setImageURI(giftData.imagerurl.toUri())

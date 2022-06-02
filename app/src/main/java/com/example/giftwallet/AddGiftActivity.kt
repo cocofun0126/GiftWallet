@@ -78,7 +78,7 @@ class AddGiftActivity : AppCompatActivity() {
 
     private fun insertGift(){
 //        val giftTitle = binding.edtTitle.text.toString() //설명
-        var giftInfo = binding.edtInfo.toString() //내용(이미지 내용)
+        var giftInfo = binding.edtInfo.text.toString() //내용(이미지 내용)
         val giftBrand = binding.spinnerBrand.selectedItem.toString() // 브랜드명
         val giftValidDate = binding.edtValidDate.text.toString() //유효기간 설정
         var giftUseYn = binding.radioGroup.checkedRadioButtonId //쿠폰 사용여부
@@ -110,7 +110,7 @@ class AddGiftActivity : AppCompatActivity() {
         }else{
             Thread{
 //                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
-                giftDao.insertGift(GiftEntity(null,savedUri, giftimageinfo, giftBrand, giftValidDate, giftUseYn))
+                giftDao.insertGift(GiftEntity(null,savedUri, giftInfo, giftBrand, giftValidDate, giftUseYn))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -181,12 +181,14 @@ class AddGiftActivity : AppCompatActivity() {
             .addOnSuccessListener { visionText ->
 
 //                텍스트 보자
-                binding.edtInfo.setText(visionText.text)
-                giftimageinfo = visionText.text
-                var tmptxt_n = giftimageinfo.replace("\n","|").replace(" ","|") // newline |로 변환
-                var tmptxt_split = tmptxt_n.split("|") //띄워쓰기 기준 변환
-                var tmptxt_listset = tmptxt_split.toSet() //중복제거
-                var gall_arraylist = tmptxt_listset.toCollection(ArrayList<String>()) //collection으로 고유값 엔터라인 분기 arraylist
+                var gall_arraylist = visionText.text
+                    .replace("\n","|")
+                    .replace(" ","|") // newline |로 변환
+                    .split("|") //띄워쓰기 기준 변환
+                    .toSet() //중복제거
+                    .toCollection(ArrayList<String>()) //collection으로 고유값 엔터라인 분기 arraylist
+
+                binding.edtInfo.setText(visionText.text.replace("\n"," "))
 
 //                정규식 참고자료
 //                https://codechacha.com/ko/kotlin-how-to-use-regex/
@@ -197,7 +199,9 @@ class AddGiftActivity : AppCompatActivity() {
                 val valDateRegex3 = Regex("..\\...\\...")//2022.12.31 -> 22.12.31
 
 //                문자열 띄워쓰기 제거
-                var getDateStr = giftimageinfo.replace("\n","").replace(" ","")
+                var getDateStr = visionText.text.replace("\n"," ")
+                                                .replace("\n","")
+                                                .replace(" ","")
 //                string에서 일자추출 정규식 적용 및 arraylist변환 필요!!!!!!!!!!!!!!!
 
                 val matchResult1: MatchResult? = valDateRegex1.find(getDateStr)

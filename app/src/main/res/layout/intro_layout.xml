@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".IntroActivity">
 
     <ImageView
         android:id="@+id/iv_intro_cat"
-        android:layout_width="279dp"
-        android:layout_height="538dp"
+        android:layout_width="392dp"
+        android:layout_height="551dp"
         android:scaleType="fitXY"
         android:src="@raw/intro_cat"
         app:layout_constraintBottom_toBottomOf="parent"
