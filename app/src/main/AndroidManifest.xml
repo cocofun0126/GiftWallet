@@ -24,9 +24,9 @@
     <application
         android:allowBackup="true"
         android:requestLegacyExternalStorage="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_smilecat"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_smilecat_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GiftWallet"
         android:hardwareAccelerated="false" >
