@@ -29,17 +29,12 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var db : AppDatabase
     lateinit var giftDao : GiftDao
     lateinit var brandDao : BrandDao
-    lateinit var giftimageurl : String
-    lateinit var giftimageinfo : String
-
     lateinit var temp : Intent
+    var urlCnt:Int = 0// 동일이미지 등록 중복방지
+
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
 
-    private var giftCheckUrl:Int ?= null
-
     private var brandList: ArrayList<String> = arrayListOf<String>()
-//    private var brandList: ArrayList<BrandEntity> = arrayListOf<BrandEntity>()
-
 //    https://lab.cliel.com/283
 
     // When using Latin script library
@@ -47,8 +42,6 @@ class AddGiftActivity : AppCompatActivity() {
 
 //    // When using Korean script library
 //    val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,33 +57,27 @@ class AddGiftActivity : AppCompatActivity() {
             insertGift()
         }
 
-//        갤러리 연동
-        binding.ivAddgift.setOnClickListener{
+        binding.ivAddgift.setOnClickListener{ //        갤러리 연동
             getImageFromGalary()
         }
-//        binding.ivAddgift.setOnLongClickListener{
-//
-////            zoomOut()
-//
-//        }
-
     }
 
     private fun insertGift(){
-//        val giftTitle = binding.edtTitle.text.toString() //설명
+
         var giftInfo = binding.edtInfo.text.toString() //내용(이미지 내용)
         val giftBrand = binding.spinnerBrand.selectedItem.toString() // 브랜드명
         val giftValidDate = binding.edtValidDate.text.toString() //유효기간 설정
         var giftUseYn = binding.radioGroup.checkedRadioButtonId //쿠폰 사용여부
+//        var orgUrl = binding.tvUrl.text.toString() //원본이미지 url
 
         val data = temp
 
         var savedUri : String = ""
 
-        val imageUri = data.data
-        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+        val orgUrl = data.data
+        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, orgUrl)
 
-        if (imageUri != null) {
+        if (orgUrl != null) {
 //            var img = data?.extras?.get("data") as Bitmap
             savedUri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
         }
@@ -110,7 +97,7 @@ class AddGiftActivity : AppCompatActivity() {
         }else{
             Thread{
 //                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
-                giftDao.insertGift(GiftEntity(null,savedUri, giftInfo, giftBrand, giftValidDate, giftUseYn))
+                giftDao.insertGift(GiftEntity(null,savedUri, giftInfo, giftBrand, giftValidDate, giftUseYn, orgUrl.toString()))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()
@@ -142,26 +129,22 @@ class AddGiftActivity : AppCompatActivity() {
                 data?:return
 
                 val uri = data.data as Uri
-//                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//                getContentResolver().takePersistablePermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-//                if (data?.extras?.get("data") != null) {
-//                    val img = data?.extras?.get("data") as Bitmap
-//                }
-
                 temp = data
-                giftimageurl = uri.toString()
-                binding.tvUrl.text = uri.toString()
-                binding.ivAddgift.setImageURI(uri)
-//                binding.edtTitle.text.toString()
 
-                Toast.makeText(this, "사진URI$binding.tvUrl.text.", Toast.LENGTH_SHORT).show()
+                giftCheckUrl(uri.toString())
+//                등록된 쿠폰이 아닌 경우
+                if(urlCnt.compareTo(0)>0){
+                    Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "등록 가능한 구폰입니다.", Toast.LENGTH_SHORT).show()
+                    binding.tvUrl.text = uri.toString()
+                    binding.ivAddgift.setImageURI(uri)
 //                이미지 텍스트 인식
-                imageFromPath(this,uri)
+                    imageFromPath(this,uri)
+                }
             }
-
             else -> {
-                Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "쿠폰을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -173,7 +156,6 @@ class AddGiftActivity : AppCompatActivity() {
     }
 
 //    이미지 텍스트 추출
-
     private fun recognizeText(image: InputImage) {
 
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
@@ -244,15 +226,10 @@ class AddGiftActivity : AppCompatActivity() {
 
                 getAllBrandList(gall_arraylist) // brandList에 값 전달
 
-
-
-//                val brandarray = resources.getStringArray(R.array.brand_array)
-//                val brandarray = resources.getStringArray(R.array.brand_array)
 //                https://kkh0977.tistory.com/650
 //                1. ArrayList : 코틀린에서 동적 배열 역할을 수행합니다
 //                2. contains : 특정 값이 포함된 여부를 확인합니다
 //                3. indexOf : 특정 데이터 인덱스 값을 확인합니다
-
 
 //                val arrayList = brandarray.toCollection(ArrayList<String>())//xml에 입력된 브랜드 array
 //                gall_arraylist 갤러리에서 불러온 단어들
@@ -329,7 +306,6 @@ class AddGiftActivity : AppCompatActivity() {
 //    }
 
     private fun imageFromPath(context: Context, uri: Uri) {
-        // [START image_from_path]
         val image: InputImage
         try {
             image = InputImage.fromFilePath(context, uri)
@@ -337,7 +313,6 @@ class AddGiftActivity : AppCompatActivity() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        // [END image_from_path]
     }
 
 
@@ -410,9 +385,9 @@ class AddGiftActivity : AppCompatActivity() {
             }
         }
     }
-    private fun giftCheckUrl(url:String) {
+    private fun giftCheckUrl(url:String){
         Thread {
-            giftCheckUrl = giftDao.getGiftCheckUrl(url)
+            urlCnt = giftDao.getGiftCheckUrl("%$url%")
 //            setRecyclerView()
         }.start()
     }
