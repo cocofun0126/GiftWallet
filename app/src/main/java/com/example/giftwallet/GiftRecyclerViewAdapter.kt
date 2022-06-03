@@ -1,7 +1,10 @@
 package com.example.giftwallet
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftwallet.databinding.ItemGiftBinding
@@ -23,6 +26,7 @@ class GiftRecyclerViewAdapter(
         var tv_useyn = binding.tvUseyn
 
         val root = binding.root
+
     }
 
     //    뷰 객체 생성
@@ -57,7 +61,24 @@ class GiftRecyclerViewAdapter(
             }
         }
 
+//        https://yunaaaas.tistory.com/57
+//        https://ddolcat.tistory.com/591c
+//        image 클릭시 zoom fragment 실행
+        holder.iv_gift_image.setOnClickListener() {
+            println("Click됨됨Click됨됨Click됨됨Click됨됨Click됨됨Click됨됨Click됨됨Click됨됨")
+            println("이미지clickposition:"+position)
+            println(giftList[position].toString())
+        }
+
+//        나머지 영역 클릭 시 수정 fragment 실행
+        holder.root.setOnClickListener(){
+            println("root클릭")
+            println("root클릭position:"+position)
+            println(giftList[position].toString())
+        }
     }
+
+
 
     override fun getItemCount(): Int {
         return giftList.size

@@ -14,7 +14,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.databinding.ActivityMainBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
 //import com.example.giftwallet.giftlist.db.BrandDao
@@ -63,6 +66,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
             startActivity(intent)
         }
 
+
         // DB 인스턴스를 가져오고 DB작업을 할 수 있는 DAO를 가져옵니다.
         db = AppDatabase.getInstance(this)!!
 
@@ -106,7 +110,8 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
             adapter = GiftRecyclerViewAdapter(giftList, this) // ❷ 어댑터 객체 할당
 
             binding.recyclerView.adapter = adapter // 리사이클러뷰 어댑터로 위에서 만든 어댑터 설정
-            binding.recyclerView.layoutManager = LinearLayoutManager(this) // 레이아웃 매니저 설정
+//            binding.recyclerView.layoutManager = LinearLayoutManager(this) // 레이아웃 매니저 설정
+            binding.recyclerView.layoutManager = GridLayoutManager(this, 2) // 레이아웃 매니저 설정
         }
     }
 
