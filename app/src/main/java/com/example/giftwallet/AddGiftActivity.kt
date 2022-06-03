@@ -22,6 +22,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import com.example.giftwallet.giftlist.db.BrandDao
 
+var urlCnt:Int = 0// 동일이미지 등록 중복방지
 
 class AddGiftActivity : AppCompatActivity() {
 
@@ -30,7 +31,6 @@ class AddGiftActivity : AppCompatActivity() {
     lateinit var giftDao : GiftDao
     lateinit var brandDao : BrandDao
     lateinit var temp : Intent
-    var urlCnt:Int = 0// 동일이미지 등록 중복방지
 
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
 
@@ -132,10 +132,14 @@ class AddGiftActivity : AppCompatActivity() {
                 temp = data
 
                 giftCheckUrl(uri.toString())
-//                등록된 쿠폰이 아닌 경우
+
+                println("urlCnturlCnturlCnturlCnturlCnt"+urlCnt)
                 if(urlCnt.compareTo(0)>0){
+                    println("urlCnt>0")
+//                if(urlCnt > 0){
                     Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
                 }else{
+                    println("urlCnt<0")
                     Toast.makeText(this, "등록 가능한 구폰입니다.", Toast.LENGTH_SHORT).show()
                     binding.tvUrl.text = uri.toString()
                     binding.ivAddgift.setImageURI(uri)
@@ -172,8 +176,8 @@ class AddGiftActivity : AppCompatActivity() {
 
                 binding.edtInfo.setText(visionText.text.replace("\n"," "))
 
-//                정규식 참고자료
-//                https://codechacha.com/ko/kotlin-how-to-use-regex/
+//              정규식 참고자료
+//              https://codechacha.com/ko/kotlin-how-to-use-regex/
 
 //--------------유효기간 정규식 생성 START--------------
                 val valDateRegex1 = Regex("..년.*월.*일") // 2022년12월31일 -> 22년12월31일
@@ -217,7 +221,7 @@ class AddGiftActivity : AppCompatActivity() {
                     dateFormatParser.parse(binding.edtValidDate.toString()) //대상 값 포맷에 적용되는지 확인
                     true
                 } catch (e: Exception) {
-                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
                     false
                 }
 
@@ -387,7 +391,9 @@ class AddGiftActivity : AppCompatActivity() {
     }
     private fun giftCheckUrl(url:String){
         Thread {
+            println("urlurlurl%$url%")
             urlCnt = giftDao.getGiftCheckUrl("%$url%")
+            println("urlCnturlCnt%$urlCnt%")
 //            setRecyclerView()
         }.start()
     }
