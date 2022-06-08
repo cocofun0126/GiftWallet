@@ -4,23 +4,19 @@ import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.Intent.*
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.giftwallet.databinding.ActivityAddGiftBinding
 import com.example.giftwallet.databinding.ActivityMainBinding
 import com.example.giftwallet.giftlist.db.AppDatabase
-//import com.example.giftwallet.giftlist.db.BrandDao
 import com.example.giftwallet.giftlist.db.GiftDao
 import com.example.giftwallet.giftlist.db.GiftEntity
 
@@ -38,9 +34,9 @@ val CAMERA_CODE = 98
 val STORAGE_CODE = 99
 
 
-
-
 class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
+
+    lateinit var navController : NavController
 
     private lateinit var binding:ActivityMainBinding
 
@@ -55,6 +51,11 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        navController = nav_host_fragment.findNavController()
+//        https://velog.io/@changhee09/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-Navigation-Component
+        binding.apply{
+            navController = findNavController(R.id.nav_host_fragment)
+        }
 
         binding.btnAdd.setOnClickListener {
             val intent = Intent(this, AddGiftActivity::class.java).also { it.addCategory(Intent.ACTION_OPEN_DOCUMENT)

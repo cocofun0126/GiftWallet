@@ -137,10 +137,12 @@ class AddGiftActivity : AppCompatActivity() {
                 if(urlCnt.compareTo(0)>0){
                     println("urlCnt>0")
 //                if(urlCnt > 0){
-                    Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "0보다큼urlcntcount$urlCnt", Toast.LENGTH_SHORT).show()
                 }else{
                     println("urlCnt<0")
-                    Toast.makeText(this, "등록 가능한 구폰입니다.", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "등록 가능한 구폰입니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "0임urlcntcount$urlCnt", Toast.LENGTH_SHORT).show()
                     binding.tvUrl.text = uri.toString()
                     binding.ivAddgift.setImageURI(uri)
 //                이미지 텍스트 인식
@@ -320,7 +322,6 @@ class AddGiftActivity : AppCompatActivity() {
     }
 
 
-
     fun saveFile(fileName: String, mimeType: String, bitmap: Bitmap): Uri?
     {
         var CV = ContentValues()
@@ -392,7 +393,8 @@ class AddGiftActivity : AppCompatActivity() {
     private fun giftCheckUrl(url:String){
         Thread {
             println("urlurlurl%$url%")
-            urlCnt = giftDao.getGiftCheckUrl("%$url%")
+
+            urlCnt = giftDao.getUrlCount("%$url%")
             println("urlCnturlCnt%$urlCnt%")
 //            setRecyclerView()
         }.start()

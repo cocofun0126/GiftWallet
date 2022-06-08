@@ -2,12 +2,18 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 apply plugin: 'com.android.application'
 
 android {
     compileSdk 32
     buildFeatures.viewBinding true
+
+    androidExtensions {
+        experimental true
+    }
 
     defaultConfig {
         applicationId "com.example.giftwallet"
