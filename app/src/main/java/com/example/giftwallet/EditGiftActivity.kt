@@ -54,15 +54,30 @@ class EditGiftActivity : AppCompatActivity() {
         giftDao = db.getGiftDao()
         brandDao = db.getBrandDao()
 
+//        브랜드 목록 불러오기
+
+
+//        사용여부 체크
+
+
 //        불러온 데이터 매칭처리
         data = intent.getSerializableExtra("data") as GiftEntity
         if (data != null) {
             binding.ivAddgift.setImageURI(data.imageurl.toUri())
             binding.edtInfo.setText(data.info)
+            binding.edtValidDate.setText(data.validate)
+            binding.tvUrl.setText(data.orgurl)
+//            binding.spinnerBrand.set
+
+//            브랜드목록 불러온 후 selection체크
+//            binding.spinnerBrand.setSelection(brandList.indexOf(data.brand))
+
+
         }
 
 
         binding.btnCompletion.setOnClickListener{
+//            유효기간, 사용미사용, 상품설명 수정가능하도록
             updateGift()
         }
 
