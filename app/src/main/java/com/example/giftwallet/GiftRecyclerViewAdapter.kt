@@ -38,6 +38,11 @@ class GiftRecyclerViewAdapter(
                 intent.putExtra("data", item);
                 intent.run { context.startActivity(this) }
             }
+            root.setOnClickListener() {
+                val intent = Intent(context, AddGiftActivity::class.java)
+                intent.putExtra("data", item);
+                intent.run { context.startActivity(this) }
+            }
         }
     }
 
@@ -79,11 +84,11 @@ class GiftRecyclerViewAdapter(
         holder?.bind(giftList[position])
 
 //        나머지 영역 클릭 시 수정 fragment 실행
-        holder.root.setOnClickListener(){
-            println("root클릭")
-            println("root클릭position:"+position)
-            println(giftList[position].toString())
-        }
+//        holder.root.setOnClickListener(){
+//            println("root클릭")
+//            println("root클릭position:"+position)
+//            println(giftList[position].toString())
+//        }
     }
 
 
