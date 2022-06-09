@@ -12,7 +12,9 @@ import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.giftwallet.databinding.ActivityAddGiftBinding
+import com.example.giftwallet.databinding.ActivityEditGiftBinding
 import com.example.giftwallet.giftlist.db.*
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -23,8 +25,9 @@ import java.text.SimpleDateFormat
 import com.example.giftwallet.giftlist.db.BrandDao
 
 class EditGiftActivity : AppCompatActivity() {
+    lateinit var data : GiftEntity
 
-    lateinit var binding : ActivityAddGiftBinding
+    lateinit var binding : ActivityEditGiftBinding
     lateinit var db : AppDatabase
     lateinit var giftDao : GiftDao
     lateinit var brandDao : BrandDao
@@ -44,23 +47,31 @@ class EditGiftActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityAddGiftBinding.inflate(layoutInflater)
+        binding = ActivityEditGiftBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = AppDatabase.getInstance(this)!!
         giftDao = db.getGiftDao()
         brandDao = db.getBrandDao()
 
-        binding.btnCompletion.setOnClickListener{
-            insertGift()
+//        불러온 데이터 매칭처리
+        data = intent.getSerializableExtra("data") as GiftEntity
+        if (data != null) {
+            binding.ivAddgift.setImageURI(data.imageurl.toUri())
+            binding.edtInfo.setText(data.info)
         }
 
-        binding.ivAddgift.setOnClickListener{ //        갤러리 연동
-            getImageFromGalary()
+
+        binding.btnCompletion.setOnClickListener{
+            updateGift()
         }
+
+//        binding.ivAddgift.setOnClickListener{ //        갤러리 연동
+//            getImageFromGalary()
+//        }
     }
 
-    private fun insertGift(){
+    private fun updateGift(){
 
         var giftInfo = binding.edtInfo.text.toString() //내용(이미지 내용)
         val giftBrand = binding.spinnerBrand.selectedItem.toString() // 브랜드명
@@ -75,10 +86,10 @@ class EditGiftActivity : AppCompatActivity() {
         val orgUrl = data.data
         val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, orgUrl)
 
-        if (orgUrl != null) {
-//            var img = data?.extras?.get("data") as Bitmap
-            savedUri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
-        }
+//        if (orgUrl != null) {
+////            var img = data?.extras?.get("data") as Bitmap
+//            savedUri = saveFile(RandomFileName(), "image/jpeg", bitmap).toString()
+//        }
 
 //        사용여부
         when(giftUseYn){
@@ -95,7 +106,7 @@ class EditGiftActivity : AppCompatActivity() {
         }else{
             Thread{
 //                giftDao.insertGift(GiftEntity(null,giftTitle,savedUri, giftimageinfo, giftBrand, giftValidDate))
-                giftDao.insertGift(GiftEntity(null,savedUri, giftInfo, giftBrand, giftValidDate, giftUseYn, orgUrl.toString()))
+                giftDao.updateGift(GiftEntity(null,savedUri, giftInfo, giftBrand, giftValidDate, giftUseYn, orgUrl.toString()))
                 runOnUiThread{
                     Toast.makeText(this,"추가되었습니다",Toast.LENGTH_SHORT).show()
                     finish()

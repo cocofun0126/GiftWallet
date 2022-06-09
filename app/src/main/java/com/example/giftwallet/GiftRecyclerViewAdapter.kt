@@ -39,7 +39,7 @@ class GiftRecyclerViewAdapter(
                 intent.run { context.startActivity(this) }
             }
             root.setOnClickListener() {
-                val intent = Intent(context, AddGiftActivity::class.java)
+                val intent = Intent(context, EditGiftActivity::class.java)
                 intent.putExtra("data", item);
                 intent.run { context.startActivity(this) }
             }

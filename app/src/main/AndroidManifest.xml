@@ -45,6 +45,9 @@
             android:name=".AddGiftActivity"
             android:exported="false" /> <!-- 인트로 -->
         <activity
+            android:name=".EditGiftActivity"
+            android:exported="false" /> <!-- 인트로 -->
+        <activity
             android:name=".IntroActivity"
             android:exported="true">
             <intent-filter>

@@ -20,6 +20,10 @@ interface GiftDao {
     fun insertGift(gift:GiftEntity)
 
     @Transaction
+    @Insert
+    fun updateGift(gift:GiftEntity)
+
+    @Transaction
     @Delete
     fun deleteGift(gift:GiftEntity)
 

@@ -13,22 +13,12 @@ class ImageZoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_zoom)
-
-
-
-
-
         binding = ActivityImageZoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val data = intent.getParcelableExtra<GiftDTO>("imageurl")
          data = intent.getSerializableExtra("data") as GiftEntity
         if (data != null) {
             binding.ivZoomGift.setImageURI(data.imageurl.toUri())
-
         }
-
-//        binding.detailTitle.text = data!!.title
-
     }
 }
