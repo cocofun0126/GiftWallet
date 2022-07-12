@@ -11,7 +11,7 @@ data class GiftEntity(
     @ColumnInfo(name = "imageurl") var imageurl: String,
     @ColumnInfo(name = "info") var info: String,
     @ColumnInfo(name = "brand") var brand: String,
-    @ColumnInfo(name = "validate") var validate: String,
+    @ColumnInfo(name = "validate") var validate: String?,
     @ColumnInfo(name = "useyn") var useyn: Int? = null,
     @ColumnInfo(name = "orgurl") var orgurl: String
     ): Serializable

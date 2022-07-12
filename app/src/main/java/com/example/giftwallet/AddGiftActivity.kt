@@ -20,9 +20,10 @@ import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import com.example.giftwallet.giftlist.db.BrandDao
+import java.util.concurrent.atomic.AtomicInteger
 
 var urlCnt:Int = 0// 동일이미지 등록 중복방지
+val fcount: AtomicInteger = AtomicInteger()
 
 class AddGiftActivity : AppCompatActivity() {
 
@@ -134,7 +135,9 @@ class AddGiftActivity : AppCompatActivity() {
                 giftCheckUrl(uri.toString())
 
                 println("urlCnturlCnturlCnturlCnturlCnt"+urlCnt)
-                if(urlCnt.compareTo(0)>0){
+
+                print("fcountfcountfcountfcount"+fcount)
+                if(fcount.toInt()>0){
                     println("urlCnt>0")
 //                if(urlCnt > 0){
 //                    Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
@@ -390,14 +393,23 @@ class AddGiftActivity : AppCompatActivity() {
             }
         }
     }
-    private fun giftCheckUrl(url:String){
-        Thread {
-            println("urlurlurl%$url%")
+    private fun giftCheckUrl(url:String) {
+//        Thread {
+//            urlCnt = giftDao.getUrlCount("%$url%")
+//            println("urlCnturlCnt%$urlCnt%")
+////            setRecyclerView()
+//        }.start()
+//    }
+//
 
-            urlCnt = giftDao.getUrlCount("%$url%")
-            println("urlCnturlCnt%$urlCnt%")
-//            setRecyclerView()
-        }.start()
+//        https://newbedev.com/how-to-get-the-row-count-of-room-database-in-android
+        val t = Thread {
+            val num: Int = giftDao.getUrlCount("%$url%")
+            fcount.set(num)
+        }
+        t.priority = 10
+        t.start()
+        t.join()
     }
 }
 

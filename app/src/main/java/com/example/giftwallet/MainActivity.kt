@@ -1,6 +1,8 @@
 package com.example.giftwallet
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,6 +13,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -51,6 +54,36 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle("사용기한 임박")
+            .setContentText("사용기한이 얼마 남지않은 기프티콘이 있습니다!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
+            val channel_id = "CHANNEL_ID" // 알림을 받을 채널 id 설정
+            val channel_name = "기한알림" // 채널 이름 설정
+            val descriptionText = "기프티콘 사용기한알림 채널" // 채널 설명글 설정
+            val importance = NotificationManager.IMPORTANCE_DEFAULT // 알림 우선순위 설정
+            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
+                description = descriptionText
+            }
+
+            // 만든 채널 정보를 시스템에 등록
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            // 알림 표시: 알림의 고유 ID(ex: 1002), 알림 결과
+            notificationManager.notify(1002, builder.build())
+        }
+
+
+
+
 //        navController = nav_host_fragment.findNavController()
 //        https://velog.io/@changhee09/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-Navigation-Component
         binding.apply{
@@ -72,6 +105,12 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         db = AppDatabase.getInstance(this)!!
 
         giftDao = db.getGiftDao()
+
+
+
+        getDateCalc()
+
+
 //        brandDao = db.getBrandDao()
 
 //        if(!hasPermissions(this)){
@@ -98,6 +137,18 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         Thread {
             giftList = ArrayList(giftDao.getAllGift())
             setRecyclerView()
+        }.start()
+    }
+
+    private fun getDateCalc(){
+        Thread {
+            var aa = giftDao.date_calc()
+
+            if (aa != null){
+                println("giftDao.date_calc() is not nulllllllllllllllllllllllllllllll")
+                println(aa.toString())
+
+            }
         }.start()
     }
 
