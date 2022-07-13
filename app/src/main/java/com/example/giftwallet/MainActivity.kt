@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
     private lateinit var giftDao: GiftDao
 //    private lateinit var brandDao: BrandDao
     private lateinit var giftList: ArrayList<GiftEntity>
+    private lateinit var giftExpList: ArrayList<GiftEntity>
     private lateinit var adapter: GiftRecyclerViewAdapter
 
 
@@ -55,31 +56,6 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("사용기한 임박")
-            .setContentText("사용기한이 얼마 남지않은 기프티콘이 있습니다!")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
-            val channel_id = "CHANNEL_ID" // 알림을 받을 채널 id 설정
-            val channel_name = "기한알림" // 채널 이름 설정
-            val descriptionText = "기프티콘 사용기한알림 채널" // 채널 설명글 설정
-            val importance = NotificationManager.IMPORTANCE_DEFAULT // 알림 우선순위 설정
-            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
-                description = descriptionText
-            }
-
-            // 만든 채널 정보를 시스템에 등록
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-
-            // 알림 표시: 알림의 고유 ID(ex: 1002), 알림 결과
-            notificationManager.notify(1002, builder.build())
-        }
 
 
 
@@ -142,16 +118,46 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
 
     private fun getDateCalc(){
         Thread {
-            var aa = giftDao.date_calc()
+            giftExpList = ArrayList(giftDao.date_calc())
+            println("100일미만 아이템수 "+giftExpList.size)
 
-            if (aa != null){
-                println("giftDao.date_calc() is not nulllllllllllllllllllllllllllllll")
-                println(aa.toString())
-
+            if (giftExpList.size != 0){
+                println("기프티콘 만료 100일 미만 선물이 ${giftExpList.size}개 있습니다!")
+                println("만료목록"+giftExpList.toString())
+                notifyExp()
             }
         }.start()
     }
 
+    private fun notifyExp(){
+
+
+        var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
+            .setSmallIcon(R.mipmap.ic_smilecat_round)
+            .setContentTitle("기한임박!")
+            .setContentText("기프티콘 만료 100일 미만 선물이 ${giftExpList.size}개 있습니다")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
+            val channel_id = "CHANNEL_ID" // 알림을 받을 채널 id 설정
+            val channel_name = "기한알림" // 채널 이름 설정
+            val descriptionText = "기프티콘 사용기한알림 채널" // 채널 설명글 설정
+            val importance = NotificationManager.IMPORTANCE_DEFAULT // 알림 우선순위 설정
+            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
+                description = descriptionText
+            }
+
+            // 만든 채널 정보를 시스템에 등록
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            // 알림 표시: 알림의 고유 ID(ex: 1002), 알림 결과
+            notificationManager.notify(1002, builder.build())
+        }
+    }
 
 
 

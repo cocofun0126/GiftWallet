@@ -27,11 +27,9 @@ interface GiftDao {
     @Delete
     fun deleteGift(gift:GiftEntity)
 
-
-
-//    @Query("SELECT * FROM GIFTENTITY WHERE USEYN = 1 AND  JULIANDAY(VALIDATE) - JULIANDAY('now') ")
-//    @Query("SELECT (JULIANDAY(VALIDATE) - JULIANDAY('now')) as 'date_diff', orgurl  FROM GIFTENTITY WHERE USEYN = 1 ")
-    @Query("SELECT imageurl, info, brand, cast(strftime('%YYYY%mm%dd', 'now') - strftime('%YYYY%mm%dd', VALIDATE) as int) as validate, useyn, orgurl  FROM GIFTENTITY WHERE USEYN = 1 ")
-    fun date_calc():GiftEntity?
+//    https://androidkt.com/datetime-datatype-sqlite-using-room/
+//    https://www.w3resource.com/sqlite/sqlite-strftime.php
+    @Query("SELECT imageurl, info, brand,  validate, useyn, orgurl  FROM GIFTENTITY WHERE USEYN = 1 AND cast(strftime('%Y%m%d', 'now') -  VALIDATE as int) < 100 ORDER BY VALIDATE ASC ")
+    fun date_calc():List<GiftEntity>?
 
 }
