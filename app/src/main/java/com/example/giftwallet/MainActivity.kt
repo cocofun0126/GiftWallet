@@ -122,14 +122,14 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
             println("100일미만 아이템수 "+giftExpList.size)
 
             if (giftExpList.size != 0){
-                println("기프티콘 만료 100일 미만 선물이 ${giftExpList.size}개 있습니다!")
-                println("만료목록"+giftExpList.toString())
-                notifyExp()
+//                println("기프티콘 만료 100일 미만 선물이 ${giftExpList.size}개 있습니다!")
+//                println("만료목록"+giftExpList.toString())
+                notifyExpire()
             }
         }.start()
     }
 
-    private fun notifyExp(){
+    private fun notifyExpire(){
 
 
         var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
@@ -137,8 +137,6 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener  {
             .setContentTitle("기한임박!")
             .setContentText("기프티콘 만료 100일 미만 선물이 ${giftExpList.size}개 있습니다")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
             val channel_id = "CHANNEL_ID" // 알림을 받을 채널 id 설정

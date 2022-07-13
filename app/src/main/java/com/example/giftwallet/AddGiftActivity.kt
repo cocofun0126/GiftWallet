@@ -36,6 +36,8 @@ class AddGiftActivity : AppCompatActivity() {
     val DEFAULT_GALLERY_REQUEST_CODE : Int = 1
 
     private var brandList: ArrayList<String> = arrayListOf<String>()
+    private var dayList: ArrayList<String> = arrayListOf<String>()
+
 //    https://lab.cliel.com/283
 
     // When using Latin script library
@@ -203,6 +205,34 @@ class AddGiftActivity : AppCompatActivity() {
 
                 val matchResult3: MatchResult? = valDateRegex3.find(getDateStr)
                 println("match value3: ${matchResult3?.value}")
+
+
+//                https://medium.com/@limgyumin/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%97%90%EC%84%9C-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-2c655ba35c36
+//                https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/find.html
+
+                dayList.clear()
+
+                var match1:MatchResult? = valDateRegex1.find(getDateStr)
+                while(match1?.value != null){
+                    dayList.add(match1.value)
+                    match1 = match1.next()
+                }
+
+
+                var match2:MatchResult? = valDateRegex2.find(getDateStr)
+                while(match2?.value != null){
+                    dayList.add(match2.value)
+                    match2 = match2.next()
+                }
+
+                var match3:MatchResult? = valDateRegex3.find(getDateStr)
+                while(match3?.value != null){
+                    dayList.add(match3.value)
+                        match3 = match3.next()
+                }
+
+                println("dayList.toString()==>"+dayList.toString())
+
 
                 if (matchResult1?.value != null){ //22년12월31일 -> 20221231
                     binding.edtValidDate.setText("20"+matchResult1?.value.toString()
