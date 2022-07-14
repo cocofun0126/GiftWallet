@@ -37,6 +37,7 @@ class AddGiftActivity : AppCompatActivity() {
 
     private var brandList: ArrayList<String> = arrayListOf<String>()
     private var dayList: ArrayList<String> = arrayListOf<String>()
+    private var dayListReplace: ArrayList<String> = arrayListOf<String>()
 
 //    https://lab.cliel.com/283
 
@@ -136,18 +137,13 @@ class AddGiftActivity : AppCompatActivity() {
 
                 giftCheckUrl(uri.toString())
 
-                println("urlCnturlCnturlCnturlCnturlCnt"+urlCnt)
-
-                print("fcountfcountfcountfcount"+fcount)
                 if(fcount.toInt()>0){
-                    println("urlCnt>0")
-//                if(urlCnt > 0){
 //                    Toast.makeText(this, "이미 등록된 구폰입니다.", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this, "0보다큼urlcntcount$urlCnt", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "이미 등록된 구폰입니다$urlCnt", Toast.LENGTH_SHORT).show()
                 }else{
                     println("urlCnt<0")
 //                    Toast.makeText(this, "등록 가능한 구폰입니다.", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this, "0임urlcntcount$urlCnt", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "등록 가능한 구폰입니다$urlCnt", Toast.LENGTH_SHORT).show()
                     binding.tvUrl.text = uri.toString()
                     binding.ivAddgift.setImageURI(uri)
 //                이미지 텍스트 인식
@@ -195,29 +191,18 @@ class AddGiftActivity : AppCompatActivity() {
                 var getDateStr = visionText.text.replace("\n"," ")
                                                 .replace("\n","")
                                                 .replace(" ","")
-//                string에서 일자추출 정규식 적용 및 arraylist변환 필요!!!!!!!!!!!!!!!
-
-                val matchResult1: MatchResult? = valDateRegex1.find(getDateStr)
-                println("match value1: ${matchResult1?.value}")
-
-                val matchResult2: MatchResult? = valDateRegex2.find(getDateStr)
-                println("match value2: ${matchResult2?.value}")
-
-                val matchResult3: MatchResult? = valDateRegex3.find(getDateStr)
-                println("match value3: ${matchResult3?.value}")
-
 
 //                https://medium.com/@limgyumin/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%97%90%EC%84%9C-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-2c655ba35c36
 //                https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/find.html
 
                 dayList.clear()
+                dayListReplace.clear()
 
                 var match1:MatchResult? = valDateRegex1.find(getDateStr)
                 while(match1?.value != null){
                     dayList.add(match1.value)
                     match1 = match1.next()
                 }
-
 
                 var match2:MatchResult? = valDateRegex2.find(getDateStr)
                 while(match2?.value != null){
@@ -233,21 +218,23 @@ class AddGiftActivity : AppCompatActivity() {
 
                 println("dayList.toString()==>"+dayList.toString())
 
-
-                if (matchResult1?.value != null){ //22년12월31일 -> 20221231
-                    binding.edtValidDate.setText("20"+matchResult1?.value.toString()
+                for (index in dayList.indices){
+                    dayListReplace.add("20"+dayList.get(index)
                         .replace("년","")
                         .replace("월","")
-                        .replace("일",""))
-                }else if(matchResult2?.value != null){//22-12-31 -> 20221231
-                    binding.edtValidDate.setText("20"+matchResult2?.value.toString()
-                        .replace("-",""))
-                }else if(matchResult3?.value != null){//22.12.31 -> 20221231
-                    binding.edtValidDate.setText("20"+matchResult3?.value.toString()
+                        .replace("일","")
+                        .replace("-","")
                         .replace(".",""))
-                }else{
-                    binding.edtValidDate.setText("")
                 }
+                dayListReplace.distinct()
+//                dayListReplace.toSet()
+//                dayListReplace.sortedDescending()
+                dayListReplace.sortDescending()
+
+                binding.edtValidDate.setText(dayListReplace[0])
+
+                for (line in dayListReplace)
+                    println("정렬값 확인=>>"+line.toString())
 
 //              날짜 유효성 체크
                 try {
@@ -256,7 +243,7 @@ class AddGiftActivity : AppCompatActivity() {
                     dateFormatParser.parse(binding.edtValidDate.toString()) //대상 값 포맷에 적용되는지 확인
                     true
                 } catch (e: Exception) {
-//                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
                     false
                 }
 
