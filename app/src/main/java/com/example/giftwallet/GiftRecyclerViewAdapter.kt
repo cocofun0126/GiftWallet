@@ -13,9 +13,8 @@ import com.example.giftwallet.giftlist.db.GiftEntity
 class GiftRecyclerViewAdapter(
 //    private val giftList: ArrayList<GiftEntity>,
     private val giftList: MutableList<GiftEntity> = mutableListOf<GiftEntity>(),
-    private val listener: OnItemLongClickListener
-
-) : RecyclerView.Adapter<GiftRecyclerViewAdapter.MyViewHolder>() {
+    private val listener: OnItemLongClickListener) :
+    RecyclerView.Adapter<GiftRecyclerViewAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(binding: ItemGiftBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -89,6 +88,11 @@ class GiftRecyclerViewAdapter(
 //            println("root클릭position:"+position)
 //            println(giftList[position].toString())
 //        }
+
+        holder.root.setOnLongClickListener {
+            listener.onLongClick(position)
+            false
+        }
     }
 
 
