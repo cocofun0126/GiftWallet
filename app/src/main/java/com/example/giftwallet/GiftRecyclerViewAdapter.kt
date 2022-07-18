@@ -89,6 +89,7 @@ class GiftRecyclerViewAdapter(
 //            println(giftList[position].toString())
 //        }
 
+//            삭제기능
         holder.root.setOnLongClickListener {
             listener.onLongClick(position)
             false
