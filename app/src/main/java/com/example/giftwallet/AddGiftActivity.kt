@@ -231,20 +231,24 @@ class AddGiftActivity : AppCompatActivity() {
 //                dayListReplace.sortedDescending()
                 dayListReplace.sortDescending()
 
-                binding.edtValidDate.setText(dayListReplace[0])
 
-                for (line in dayListReplace)
-                    println("정렬값 확인=>>"+line.toString())
+                if(dayListReplace.size > 0) {
+                    binding.edtValidDate.setText(dayListReplace[0])
+
+                    //                for (line in dayListReplace)
+//                    println("정렬값 확인=>>"+line.toString())
 
 //              날짜 유효성 체크
-                try {
-                    val dateFormatParser = SimpleDateFormat("yyyy/MM/dd") //검증할 날짜 포맷 설정
-                    dateFormatParser.isLenient = false //false일경우 처리시 입력한 값이 잘못된 형식일 시 오류가 발생
-                    dateFormatParser.parse(binding.edtValidDate.toString()) //대상 값 포맷에 적용되는지 확인
-                    true
-                } catch (e: Exception) {
-                    Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
-                    false
+                    try {
+                        val dateFormatParser = SimpleDateFormat("yyyy/MM/dd") //검증할 날짜 포맷 설정
+                        dateFormatParser.isLenient = false //false일경우 처리시 입력한 값이 잘못된 형식일 시 오류가 발생
+                        dateFormatParser.parse(binding.edtValidDate.toString()) //대상 값 포맷에 적용되는지 확인
+                        true
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "날짜를 확인해 주세요",Toast.LENGTH_SHORT).show()
+                        false
+                    }
+
                 }
 
 
